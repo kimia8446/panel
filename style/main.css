@@ -1,0 +1,28 @@
+
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+
+body{
+    font-family: Vazirmatn ;
+    min-height: 100vh;
+    background: linear-gradient(to bottom , #ececec , #4772cf);
+}
+
+.card{
+    box-shadow: #3b3b3b;
+}
+
+.container{
+    color: #d3def5;
+    opacity: 80%;
+    font-family: Vazirmatn ;
+}
+
+.title{
+color: rgb(57, 57, 59);
+font-family: Vazirmatn;
+}
