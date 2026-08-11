@@ -28,6 +28,8 @@ try {
 
 } catch(PDOException $e) {
 
-    die("خطا در اتصال: ");
+    die("خطا در اتصال: " . $e->getMessage());
 
 }
+
+

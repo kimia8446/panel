@@ -6,13 +6,15 @@
 
 
 body{
-    font-family: Vazirmatn ;
+    margin: 0;
+    font-family:Vazirmatn;
     min-height: 100vh;
     background: linear-gradient(to bottom , #ececec , #4772cf);
+    transition: background-color 0.3s, 0.3s;
 }
 
 body.dark{
-    background-color:to bottom , #212529 ,  #a9aaaa;
+    background:linear-gradient(to bottom , #a9aaaa , #212529);
     color: white;
 }
 
@@ -30,11 +32,6 @@ body.dark .form-control {
 body.dark .form-control::placeholder {
     color: #ced4da;
 }
-body {
-    margin: 0;
-    background-color: #f5f6fa;
-}
-
 
 .sidebar {
     position: fixed;
@@ -54,6 +51,10 @@ body {
     z-index: 1000;
 }
 
+body.dark .sidebar {
+    background-color: #212529;
+}
+
 .sidebar-title {
     height: 70px;
 
@@ -64,7 +65,7 @@ body {
     font-size: 20px;
     font-weight: bold;
 
-    border-bottom: 1px solid ;#4772cf
+    border-bottom: 1px solid #4772cf;
 }
 .sidebar-menu {
     display: flex;
@@ -107,7 +108,18 @@ body {
 .menu-item span:first-child {
     font-size: 20px;
 }
+body.dark .menu-item {
+    color: white;
+}
 
+body.dark .menu-item:hover {
+    background-color: #343a40;
+}
+
+body.dark .theme-item {
+    border-color: #adb5bd;
+    color: white;
+}
 
 .sidebar-bottom {
     margin-top: auto;
@@ -132,6 +144,9 @@ body {
 
     padding: 40px;
 }
+body.dark .main-content {
+    background-color: #343a40;
+}
 .welcome-box {
     background-color: white;
 
@@ -150,4 +165,18 @@ body {
 
 .welcome-box p {
     color: #6c757d;
-} 
+}
+body.dark .welcome-box {
+    background-color: #212529;
+    color: white;
+}
+
+body.dark .welcome-box p {
+    color: #ced4da;
+}
+
+body.dark .alert-info {
+    background-color: #495057;
+    color: white;
+    border-color: #6c757d;
+}

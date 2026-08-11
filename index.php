@@ -1,3 +1,4 @@
+
 <!DOCTYPE Html>
 <html lang ="fa" dir="rtl">
 <head>
@@ -7,13 +8,15 @@
 
 <link rel="stylesheet" href="style/bootstrap.min.css">
 <link rel="stylesheet" href="style/Vazirmatn-font-face.css">
-<link rel="stylesheet" href="style/main.css">
+<link rel="stylesheet" href="style/style.css">
 
-<script src="js/bootstrap.bundle.min.js"></script>
-<script src="js/script.js"></script>
+
     <title>محصولات</title>
 </head>
 <body>
+<?php
+include("aside.php");
+?>
   <div class="container p-5">
     <section class="d-flex justify-content-center align-item-center vh-100">
         <fieldset>
@@ -45,6 +48,8 @@
           </form>
         </fieldset>
     </section>
+<script src="js/bootstrap.bundle.min.js"></script>
+<script src="js/theme.js"></script>
 </body>
 </html>
 
