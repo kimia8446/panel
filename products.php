@@ -1,6 +1,6 @@
 <?php
-include("aside.php");
 session_start();
+include("aside.php");
 
 if (!isset($_SESSION["username"])) {
     header("Location: login.php");
@@ -25,9 +25,9 @@ $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <link rel="stylesheet" href="style/bootstrap.min.css">
-    <link rel="stylesheet" href="style/Vazirmatn-font-face.css">
+    <link rel="stylesheet" href="style/stiles/Vazirmatn-font-face.css">   
     <link rel="stylesheet" href="style/style.css">
-
+    <link rel="stylesheet" href="style/sweetalert2.min.css">
     <title>مشاهده محصولات</title>
 
 </head>
@@ -95,11 +95,15 @@ $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
                         <button
                             type="submit"
                             class="btn btn-danger"
-                            onclick="return confirm('آیا از حذف این محصول مطمئن هستید؟');"
-                        >
+                            onclick="confirmDelete(event)"                        >
                             حذف
                         </button>
-
+                        <a
+                           href="edit.php?id=<?= $product['id'] ?>"
+                           class="btn btn-warning"
+                           onclick="confirmEdit(event)" >
+                         ویرایش
+                        </a>
                     </form>
 
                 </div>
@@ -107,8 +111,6 @@ $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
             </div>
 
         <?php endforeach; ?>
-
-
     <?php endif; ?>
 
    </div>
@@ -116,25 +118,63 @@ $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
         </main>
     
-<aside class="sidebar">
-       <div class="sidebar-bottom">
-
-           <button
-               type="button"
-               id="themeButton"
-               class="menu-item theme-item btn btn-outline-secondary  mt-3">
-               حالت تیره
-            </button>
-
-            <a href="logout.php" class="menu-item logout-item">
-            <span>خروج</span>
-            </a>
-
-       </div>
-</aside>
-
 <script src="js/bootstrap.bundle.min.js"></script>
 <script src="js/theme.js"></script>
+<script src="js/sweetalert2.all.min.js"></script>
+
+<script>
+const swalWithBootstrapButtons = Swal.mixin({
+    customClass: {
+        confirmButton: "btn btn-success",
+        cancelButton: "btn btn-danger"
+    },
+    buttonsStyling: false
+});
+
+function confirmDelete(event) {
+
+    event.preventDefault();
+
+    const form = event.target.closest('form');
+
+    swalWithBootstrapButtons.fire({
+        title: "آیا مطمئن هستید؟",
+        text: "این محصول حذف خواهد شد و قابل بازگشت نیست!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonText: "بله، حذف کن",
+        cancelButtonText: "لغو",
+        reverseButtons: true
+    }).then((result) => {
+
+        if (result.isConfirmed) {
+            form.submit();
+        }
+
+    });
+}
+function confirmEdit(event) {
+
+event.preventDefault();
+
+const link = event.currentTarget;
+
+Swal.fire({
+    title: "اطلاعات ویرایش شود؟",
+    icon: "question",
+    confirmButtonText: "بله",
+    cancelButtonText: "خیر",
+    showCancelButton: true,
+    showCloseButton: true
+}).then((result) => {
+
+    if (result.isConfirmed) {
+        window.location.href = link.href;
+    }
+
+});
+}
+</script>
 </body>
 
 </html>

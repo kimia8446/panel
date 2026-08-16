@@ -6,7 +6,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <link rel="stylesheet" href="style/bootstrap.min.css">
-<link rel="stylesheet" href="style/Vazirmatn-font-face.css">
+<link rel="stylesheet" href="style/stiles/Vazirmatn-font-face.css">   
 <link rel="stylesheet" href="style/style.css">
     <title>ثبت نام </title>
 </head>
@@ -14,7 +14,6 @@
 <body>
 
 <?php
-
 session_start();
 
 require_once __DIR__ . '/config/database.php';

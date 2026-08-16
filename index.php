@@ -1,4 +1,13 @@
+<?php
 
+session_start();
+
+if (!isset($_SESSION["username"])) {
+    header("Location: login.php");
+    exit;
+}
+
+?>
 <!DOCTYPE Html>
 <html lang ="fa" dir="rtl">
 <head>
@@ -7,10 +16,8 @@
 
 
 <link rel="stylesheet" href="style/bootstrap.min.css">
-<link rel="stylesheet" href="style/Vazirmatn-font-face.css">
+<link rel="stylesheet" href="style/stiles/Vazirmatn-font-face.css">   
 <link rel="stylesheet" href="style/style.css">
-
-
     <title>محصولات</title>
 </head>
 <body>

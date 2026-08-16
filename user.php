@@ -1,7 +1,7 @@
 
 <?php
-include("aside.php");
 session_start();
+include("aside.php");
 
 
 if (!isset($_SESSION["username"])) {
@@ -34,7 +34,7 @@ $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <link rel="stylesheet" href="style/bootstrap.min.css">
-    <link rel="stylesheet" href="style/Vazirmatn-font-face.css">
+    <link rel="stylesheet" href="style/stiles/Vazirmatn-font-face.css">   
     <link rel="stylesheet" href="style/style.css">
 
     <title>کاربران</title>
@@ -45,8 +45,8 @@ $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 <div class="container mt-5">
 
-    <h2 class="text-center mb-4">
-        کاربران
+    <h2 class="textuser mb-4">
+         اسامی کاربران 
     </h2>
 
 
@@ -63,7 +63,7 @@ $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
         <?php foreach ($users as $user): ?>
 
-            <div class="card mb-3">
+            <div class="carduser mb-3">
 
                 <div class="card-body">
 
@@ -93,7 +93,7 @@ $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <?php endif; ?>
 
 
-    <a href="dashboard.php" class="btn btn-primary mt-3">
+    <a href="dashboard.php" class="btn btn-primary btn-redirect mt-3">
 
         بازگشت به داشبورد
 

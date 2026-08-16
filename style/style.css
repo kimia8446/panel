@@ -2,38 +2,57 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+    font-family:"Vazirmatn";
+    direction: rtl;
+
 }
 
+html {
+    direction: rtl;
+ 
+}
 
 body{
     margin: 0;
-    font-family:Vazirmatn;
+    font-family:"Vazirmatn";
+    direction: rtl;
+    text-align: right;
     min-height: 100vh;
     background: linear-gradient(to bottom , #ececec , #4772cf);
     transition: background-color 0.3s, 0.3s;
 }
 
 body.dark{
+    direction: rtl;
+    text-align: right;
     background:linear-gradient(to bottom , #a9aaaa , #212529);
     color: white;
 }
 
 body.dark .card {
+    direction: rtl;
+    text-align: right;
     background-color: #343a40;
     color: white;
 }
 
 body.dark .form-control {
+    direction: rtl;
+    text-align: right;
     background-color: #495057;
     color: white;
     border-color: #6c757d;
 }
 
 body.dark .form-control::placeholder {
+    direction: rtl;
+    text-align: right;
     color: #ced4da;
 }
 
 .sidebar {
+    direction: rtl;
+    text-align: right;
     position: fixed;
 
     top: 0;
@@ -52,11 +71,15 @@ body.dark .form-control::placeholder {
 }
 
 body.dark .sidebar {
+    direction: rtl;
+    text-align: right;
     background-color: #212529;
 }
 
 .sidebar-title {
     height: 70px;
+    direction: rtl;
+    text-align: right;
 
     display: flex;
     align-items: center;
@@ -68,6 +91,8 @@ body.dark .sidebar {
     border-bottom: 1px solid #4772cf;
 }
 .sidebar-menu {
+    direction: rtl;
+    text-align: right;
     display: flex;
     flex-direction: column;
 
@@ -75,6 +100,8 @@ body.dark .sidebar {
 }
 
 .menu-item {
+    direction: rtl;
+    text-align: right;
     display: flex;
 
     align-items: center;
@@ -98,6 +125,8 @@ body.dark .sidebar {
 
 
 .menu-item:hover {
+    direction: rtl;
+    text-align: right;
     background-color: #4772cf;
 
     color: white;
@@ -106,38 +135,54 @@ body.dark .sidebar {
 }
 
 .menu-item span:first-child {
+    direction: rtl;
+    text-align: right;
     font-size: 20px;
 }
 body.dark .menu-item {
+    direction: rtl;
+    text-align: right;
     color: white;
 }
 
 body.dark .menu-item:hover {
+    direction: rtl;
+    text-align: right;
     background-color: #343a40;
 }
 
 body.dark .theme-item {
+    direction: rtl;
+    text-align: right;
     border-color: #adb5bd;
     color: white;
 }
 
 .sidebar-bottom {
+    direction: rtl;
+    text-align: right;
     margin-top: auto;
 
     padding: 10px;
 }
 
 .logout-item {
+    direction: rtl;
+    text-align: right;
     color: #ff6b6b;
 }
 
 .logout-item:hover {
+    direction: rtl;
+    text-align: right;
     background-color: #dc3545;
 
     color: white;
 }
 
 .main-content {
+    direction: rtl;
+    text-align: right;
     margin-right: 250px;
 
     min-height: 100vh;
@@ -145,9 +190,13 @@ body.dark .theme-item {
     padding: 40px;
 }
 body.dark .main-content {
+    direction: rtl;
+    text-align: right;
     background-color: #343a40;
 }
 .welcome-box {
+    direction: rtl;
+    text-align: right;
     background-color: white;
 
     padding: 40px;
@@ -156,26 +205,52 @@ body.dark .main-content {
 
     box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
 }
-
-
+.carduser {
+    direction: rtl;
+    text-align: right;
+    padding: 40px;
+    margin-right: 200px;
+    border-radius: 15px;
+    background-color: #ced4da;
+    opacity: 80%;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+}
+.textuser{
+    margin-right: 200px;
+}
+.btn-redirect{
+    direction: rtl;
+    text-align: right;
+    margin-right: 200px;
+}
 .welcome-box h1 {
+    direction: rtl;
+    text-align: right;
     margin-bottom: 15px;
 }
 
 
 .welcome-box p {
+    direction: rtl;
+    text-align: right;
     color: #6c757d;
 }
 body.dark .welcome-box {
+    direction: rtl;
+    text-align: right;
     background-color: #212529;
     color: white;
 }
 
 body.dark .welcome-box p {
+    direction: rtl;
+    text-align: right;
     color: #ced4da;
 }
 
 body.dark .alert-info {
+    direction: rtl;
+    text-align: right;
     background-color: #495057;
     color: white;
     border-color: #6c757d;
