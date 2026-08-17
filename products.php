@@ -38,14 +38,17 @@ $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <div class="container-fluid">
           <div class="container mt-5">
 
-          <h2 class="text-center mb-4">
-          لیست محصولات
-          </h2>
+          <div class="page-header">
 
+<h2>
+    لیست محصولات
+</h2>
 
-    <a href="index.php" class="btn btn-primary mb-4">
-        افزودن محصول جدید
-    </a>
+<a href="index.php" class="btn btn-primary">
+    افزودن محصول جدید
+</a>
+
+</div>
 
 
 
@@ -57,60 +60,75 @@ $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
     <?php else: ?>
 
-
         <?php foreach ($products as $product): ?>
 
-            <div class="card mb-3">
+<div class="product-card">
 
-                <div class="card-body">
+    <div class="product-card-header">
 
-                    <h4>
-                        <?= htmlspecialchars($product['name']) ?>
-                    </h4>
+        <div>
+            <span class="product-label">محصول</span>
 
+            <h4 class="product-title">
+                <?= htmlspecialchars($product['name']) ?>
+            </h4>
+        </div>
 
-                    <p>
-                        <?= htmlspecialchars($product['descripe']) ?>
-                    </p>
+        <span class="product-id">
+            #<?= $product['id'] ?>
+        </span>
 
+    </div>
 
-                    <h5>
-                        <?= number_format($product['price']) ?>
-                        تومان
-                    </h5>
+    <div class="product-description">
+        <?= htmlspecialchars($product['descripe']) ?>
+    </div>
 
+    <div class="product-card-footer">
 
-                    <form
-                        action="delete.php"
-                        method="POST"
-                        class="mt-3"
-                    >
+        <div class="product-price">
+            <?= number_format($product['price']) ?>
+            <span>تومان</span>
+        </div>
 
-                        <input
-                            type="hidden"
-                            name="id"
-                            value="<?= $product['id'] ?>"
-                        >
+        <div class="product-actions">
 
-                        <button
-                            type="submit"
-                            class="btn btn-danger"
-                            onclick="confirmDelete(event)"                        >
-                            حذف
-                        </button>
-                        <a
-                           href="edit.php?id=<?= $product['id'] ?>"
-                           class="btn btn-warning"
-                           onclick="confirmEdit(event)" >
-                         ویرایش
-                        </a>
-                    </form>
+            <form
+                action="delete.php"
+                method="POST"
+            >
 
-                </div>
+                <input
+                    type="hidden"
+                    name="id"
+                    value="<?= $product['id'] ?>"
+                >
 
-            </div>
+                <button
+                    type="submit"
+                    class="btn-product btn-delete"
+                    onclick="confirmDelete(event)"
+                >
+                    حذف
+                </button>
 
-        <?php endforeach; ?>
+            </form>
+
+            <a
+                href="edit.php?id=<?= $product['id'] ?>"
+                class="btn-product btn-edit"
+                onclick="confirmEdit(event)"
+            >
+                ویرایش
+            </a>
+
+        </div>
+
+    </div>
+
+</div>
+
+<?php endforeach; ?>
     <?php endif; ?>
 
    </div>

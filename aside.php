@@ -33,6 +33,7 @@
         </button>
 
         <a href="logout.php" class="menu-item logout-item w-100">
+            <i class='fas fa-archive'></i>
             <span>خروج</span>
         </a>
 
