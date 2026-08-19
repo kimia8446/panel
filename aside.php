@@ -6,7 +6,9 @@
     </div>
 
     <nav class="sidebar-menu">
-
+    <a href="shop.php" class="menu-item">
+            <span>خانه</span>
+        </a>
         <a href="products.php" class="menu-item">
             <span>مشاهده محصولات</span>
         </a>

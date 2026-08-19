@@ -1,621 +1,1112 @@
+/* =========================================
+   RESET
+========================================= */
 
-*{
+* {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family:"Vazirmatn";
-    direction: rtl;
 
+    font-family: "Vazirmatn", sans-serif;
+
+    direction: rtl;
 }
 
 html {
     direction: rtl;
- 
 }
 
-body{
+body {
     margin: 0;
-    font-family:"Vazirmatn";
-    direction: rtl;
-    text-align: right;
+
     min-height: 100vh;
-    background: var(--background);
-    color: var(--text);
+
+    direction: rtl;
+    text-align: right;
+
+    background: #EEF2F7;
+
+    color: #172033;
+
     transition:
-    background-color 0.3s ease,
-    color 0.3s ease;}
+        background-color 0.3s ease,
+        color 0.3s ease;
+}
 
-body.dark{
-    direction: rtl;
-    text-align: right;
-    --background: #0F172A;
-    --card: #1E293B;
-    --text: #F8FAFC;
-    --text-muted: #94A3B8;
-    --border: #334155;
-    --sidebar: #020617;
+
+/* =========================================
+   COLOR SYSTEM
+========================================= */
+
+:root {
+
+    /* =========================
+       BRAND
+    ========================= */
+
+    --primary: #1D4ED8;
+    --primary-hover: #1E40AF;
+    --primary-light: #EFF6FF;
+
+    --accent: #F97316;
+    --accent-hover: #EA580C;
+    --accent-light: #FFF7ED;
+
+
+    /* =========================
+       SIDEBAR
+    ========================= */
+
+    --sidebar: #172554;
+    --sidebar-hover: #1E3A8A;
+
+
+    /* =========================
+       BACKGROUND
+    ========================= */
+
+    --background: #EEF2F7;
+    --card: #FFFFFF;
+
+
+    /* =========================
+       TEXT
+    ========================= */
+
+    --text: #172033;
+    --text-secondary: #475569;
+    --text-muted: #64748B;
+
+
+    /* =========================
+       BORDER
+    ========================= */
+
+    --border: #D7DEE8;
+
+
+    /* =========================
+       STATUS
+    ========================= */
+
+    --success: #16A34A;
+    --danger: #DC2626;
+    --warning: #F97316;
+}
+
+
+/* =========================================
+   BODY
+========================================= */
+
+body {
     background: var(--background);
     color: var(--text);
 }
 
-body.dark .card {
-    direction: rtl;
-    text-align: right;
-    background-color: #343a40;
-    color: white;
-}
 
-body.dark .form-control {
-    direction: rtl;
-    text-align: right;
-    background: #334155;
-
-    border-color: #475569;
-
-    color: white;
-}
-
-
-body.dark .form-control::placeholder {
-    direction: rtl;
-    text-align: right;
-    color: #94A3B8;}
+/* =========================================
+   SIDEBAR
+========================================= */
 
 .sidebar {
+
     direction: rtl;
     text-align: right;
+
     position: fixed;
+
     top: 0;
     right: 0;
+
     width: 250px;
     height: 100vh;
-    background: var(--sidebar);
-    color: white;
+
+    background:
+        linear-gradient(
+            180deg,
+            #172554 0%,
+            #1E3A8A 100%
+        );
+
+    color: #FFFFFF;
+
     display: flex;
     flex-direction: column;
+
     z-index: 1000;
-    box-shadow: -4px 0 20px rgba(15, 23, 42, 0.08);
+
+    box-shadow:
+        -8px 0 30px rgba(15, 23, 42, 0.16);
 }
 
-body.dark .sidebar {
-    direction: rtl;
-    text-align: right;
-    background: #020617
-}
-body.dark .sidebar-title {
 
-    border-color: #1E293B;
-}
+/* =========================================
+   SIDEBAR TITLE
+========================================= */
 
 .sidebar-title {
+
     height: 70px;
+
     direction: rtl;
-    text-align: right;
+    text-align: center;
+
     display: flex;
+
     align-items: center;
     justify-content: center;
+
     font-size: 20px;
-    font-weight: bold;
-    color: white;
-    border-bottom: 1px solid #334155;
+
+    font-weight: 700;
+
+    color: #FFFFFF;
+
+    border-bottom: 1px solid rgba(255, 255, 255, 0.10);
+
+    background: rgba(255, 255, 255, 0.03);
 }
+
+
+/* =========================================
+   SIDEBAR MENU
+========================================= */
+
 .sidebar-menu {
+
     direction: rtl;
     text-align: right;
+
     display: flex;
+
     flex-direction: column;
+
     padding: 20px 10px;
 }
 
+
+/* =========================================
+   MENU ITEM
+========================================= */
+
 .menu-item {
+
     direction: rtl;
     text-align: right;
+
     display: flex;
+
     align-items: center;
+
     gap: 12px;
+
     width: 100%;
-    padding: 14px 15px;
-    margin-bottom: 5px;
+
+    padding: 13px 15px;
+
+    margin-bottom: 6px;
+
     color: #CBD5E1;
+
     text-decoration: none;
-    border-radius: 9px;
+
+    border-radius: 10px;
+
+    border: 1px solid transparent;
+
     transition: all 0.2s ease;
 }
 
 
-.menu-item:hover {
+/* =========================================
+   MENU ICON
+========================================= */
+
+.menu-item span:first-child {
+
     direction: rtl;
+
     text-align: right;
-    background: var(--sidebar-hover);
-    color: white;
+
+    font-size: 19px;
+
+    transition: 0.2s ease;
+}
+
+
+/* =========================================
+   MENU HOVER
+========================================= */
+
+.menu-item:hover {
+
+    background: rgba(255, 255, 255, 0.10);
+
+    color: #FFFFFF;
+
+    border-color: rgba(255, 255, 255, 0.06);
+
     transform: translateX(-3px);
 }
+
+
+/* =========================================
+   ACTIVE MENU
+========================================= */
+
 .menu-item.active {
 
-    background: var(--primary);
-    color: white;
+    background: #FFFFFF;
 
+    color: #1D4ED8;
+
+    box-shadow:
+        0 6px 18px rgba(0, 0, 0, 0.15);
 }
-.menu-item span:first-child {
-    direction: rtl;
-    text-align: right;
-    font-size: 19px;
-}
+
+
+/* =========================================
+   DARK MENU
+========================================= */
+
 body.dark .menu-item {
+
     direction: rtl;
     text-align: right;
-    color: #CBD5E1;}
+
+    color: #CBD5E1;
+}
+
+body.dark .menu-item:hover {
+
+    background: rgba(255, 255, 255, 0.08);
+
+    color: #FFFFFF;
+}
 
 body.dark .menu-item.active {
 
-        background: var(--primary);
-    
-        color: white;
-    }
+    background:
+        linear-gradient(
+            135deg,
+            #2563EB,
+            #1D4ED8
+        );
 
-body.dark .menu-item:hover {
-    direction: rtl;
-    text-align: right;
-    background: #1E293B;
-    color: white;
+    color: #FFFFFF;
 }
+
+
+/* =========================================
+   THEME BUTTON
+========================================= */
 
 body.dark .theme-item {
+
     direction: rtl;
     text-align: right;
-    border-color: #adb5bd;
-    color: white;
+
+    border-color: #334155;
+
+    color: #CBD5E1;
 }
+
+
+/* =========================================
+   SIDEBAR BOTTOM
+========================================= */
 
 .sidebar-bottom {
+
     direction: rtl;
     text-align: right;
+
     margin-top: auto;
-    padding: 12px;
+
+    padding: 10px;
 }
+
+
+/* =========================================
+   LOGOUT
+========================================= */
 
 .logout-item {
+
     direction: rtl;
     text-align: right;
-    color: #FCA5A5
+
+    color: #FCA5A5;
 }
+
 
 .logout-item:hover {
+
     direction: rtl;
     text-align: right;
-    background: #7F1D1D;
 
-    color: white;
+    background-color: rgba(220, 38, 38, 0.18);
+
+    color: #FFFFFF;
 }
+
+
+/* =========================================
+   MAIN CONTENT
+========================================= */
 
 .main-content {
+
     direction: rtl;
     text-align: right;
+
     margin-right: 250px;
+
     min-height: 100vh;
+
     padding: 40px;
-}
-.main-content .container {
 
-    max-width: 1100px;
+    background:
+        linear-gradient(
+            135deg,
+            #F1F5F9 0%,
+            #EEF2F7 100%
+        );
+}
 
-}
-body.dark .main-content {
-    direction: rtl;
-    text-align: right;
-    background-color: #343a40;
-}
+
+/* =========================================
+   WELCOME BOX
+========================================= */
+
 .welcome-box {
+
     direction: rtl;
     text-align: right;
-    background-color: white;
+
+    background: #FFFFFF;
 
     padding: 40px;
 
-    border-radius: 15px;
+    border-radius: 18px;
 
-    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+    border: 1px solid #D7DEE8;
+
+    box-shadow:
+        0 8px 30px rgba(15, 23, 42, 0.07);
+
+    position: relative;
+
+    overflow: hidden;
 }
-.carduser {
-    direction: rtl;
-    text-align: right;
-    padding: 40px;
-    margin-right: 200px;
-    border-radius: 15px;
-    background-color: #ced4da;
-    opacity: 80%;
-    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+
+
+/* =========================================
+   WELCOME COLOR LINE
+========================================= */
+
+.welcome-box::before {
+
+    content: "";
+
+    position: absolute;
+
+    top: 0;
+    right: 0;
+
+    width: 100%;
+    height: 4px;
+
+    background:
+        linear-gradient(
+            90deg,
+            #1D4ED8,
+            #3B82F6,
+            #F97316
+        );
 }
-.textuser{
-    margin-right: 200px;
-}
-.btn-redirect{
-    direction: rtl;
-    text-align: right;
-    margin-right: 200px;
-}
+
+
+/* =========================================
+   WELCOME TITLE
+========================================= */
+
 .welcome-box h1 {
+
     direction: rtl;
     text-align: right;
+
     margin-bottom: 15px;
+
+    color: #172033;
+
+    font-weight: 700;
 }
 
+
+/* =========================================
+   WELCOME TEXT
+========================================= */
 
 .welcome-box p {
+
     direction: rtl;
     text-align: right;
-    color: #6c757d;
+
+    color: #64748B;
+
+    line-height: 1.8;
 }
-body.dark .welcome-box {
+
+
+/* =========================================
+   USER CARD
+========================================= */
+
+.carduser {
+
     direction: rtl;
     text-align: right;
-    background-color: #212529;
-    color: white;
+
+    padding: 40px;
+
+    margin-right: 200px;
+
+    border-radius: 18px;
+
+    background: #FFFFFF;
+
+    border: 1px solid #D7DEE8;
+
+    box-shadow:
+        0 8px 28px rgba(15, 23, 42, 0.07);
 }
 
-body.dark .welcome-box p {
+
+/* =========================================
+   USER TEXT
+========================================= */
+
+.textuser {
+
+    margin-right: 200px;
+
+    color: #172033;
+}
+
+
+/* =========================================
+   REDIRECT BUTTON
+========================================= */
+
+.btn-redirect {
+
     direction: rtl;
     text-align: right;
-    color: #ced4da;
-}
 
-body.dark .alert-info {
-    direction: rtl;
-    text-align: right;
-    background-color: #495057;
-    color: white;
-    border-color: #6c757d;
-}
-.page-header {
-
-    display: flex;
-
-    align-items: center;
-
-    justify-content: space-between;
-
-    margin-bottom: 30px;
+    margin-right: 200px;
 }
 
 
-.page-header h2 {
+/* =========================================
+   PRIMARY BUTTON
+========================================= */
 
-    margin: 0;
-    font-size: 26px;
-    font-weight: 700;
-    color: var(--text);
-
-}
 .btn-primary {
 
-    background: var(--primary);
+    background:
+        linear-gradient(
+            135deg,
+            #2563EB,
+            #1D4ED8
+        );
 
-    border-color: var(--primary);
+    border: none;
 
-    border-radius: 8px;
+    border-color: #2563EB;
 
-    padding: 10px 18px;
+    color: #FFFFFF;
 
-    font-weight: 500;
+    border-radius: 10px;
+
+    font-weight: 600;
+
+    box-shadow:
+        0 5px 14px rgba(37, 99, 235, 0.20);
 
     transition: all 0.2s ease;
 }
+
+
 .btn-primary:hover {
 
-    background: var(--primary-hover);
+    background:
+        linear-gradient(
+            135deg,
+            #1D4ED8,
+            #1E40AF
+        );
 
-    border-color: var(--primary-hover);
+    border-color: #1D4ED8;
 
-    transform: translateY(-1px);
-}
-.product-card {
-
-    background: var(--card);
-
-    border: 1px solid var(--border);
-
-    border-radius: 14px;
-
-    padding: 22px;
-
-    margin-bottom: 16px;
-
-    box-shadow:
-        0 2px 8px rgba(15, 23, 42, 0.04);
-
-    transition:
-        transform 0.2s ease,
-        box-shadow 0.2s ease;
-}
-
-.product-card:hover {
+    color: #FFFFFF;
 
     transform: translateY(-2px);
 
     box-shadow:
-        0 8px 25px rgba(15, 23, 42, 0.08);
+        0 8px 18px rgba(37, 99, 235, 0.28);
 }
-.product-card-header {
 
-    display: flex;
 
-    align-items: flex-start;
+/* =========================================
+   FORM CONTROL
+========================================= */
 
-    justify-content: space-between;
+.form-control {
 
-    margin-bottom: 15px;
+    direction: rtl;
+
+    text-align: right;
+
+    background: #F8FAFC;
+
+    color: #172033;
+
+    border: 1px solid #D7DEE8;
+
+    border-radius: 10px;
+
+    padding: 11px 14px;
+
+    transition: all 0.2s ease;
 }
-.product-label {
 
-    display: block;
 
-    color: var(--text-muted);
+.form-control:hover {
 
-    font-size: 12px;
+    background: #FFFFFF;
 
-    margin-bottom: 5px;
+    border-color: #B9C5D6;
 }
-.product-title {
 
-    margin: 0;
 
-    font-size: 18px;
+.form-control:focus {
+
+    direction: rtl;
+
+    text-align: right;
+
+    background: #FFFFFF;
+
+    color: #172033;
+
+    border-color: #2563EB;
+
+    box-shadow:
+        0 0 0 3px rgba(37, 99, 235, 0.12);
+}
+
+
+.form-control::placeholder {
+
+    direction: rtl;
+
+    text-align: right;
+
+    color: #94A3B8;
+}
+
+
+/* =========================================
+   CARDS
+========================================= */
+
+.card {
+
+    background: #FFFFFF;
+
+    border: 1px solid #D7DEE8;
+
+    border-radius: 16px;
+
+    box-shadow:
+        0 6px 20px rgba(15, 23, 42, 0.055);
+
+    transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease,
+        border-color 0.2s ease;
+}
+
+
+.card:hover {
+
+    border-color: #B9C5D6;
+
+    box-shadow:
+        0 12px 30px rgba(15, 23, 42, 0.10);
+
+    transform: translateY(-3px);
+}
+
+
+.card-body {
+
+    direction: rtl;
+
+    text-align: right;
+}
+
+
+/* =========================================
+   CARD TITLE
+========================================= */
+
+.card h4 {
+
+    color: #172033;
 
     font-weight: 600;
-
-    color: var(--text);
 }
 
 
-.product-id {
+.card h5 {
 
-    color: var(--text-muted);
-
-    background: #F1F5F9;
-
-    padding: 5px 9px;
-
-    border-radius: 6px;
-
-    font-size: 12px;
-}
-.product-description {
-
-    color: var(--text-muted);
-
-    font-size: 14px;
-
-    line-height: 1.9;
-
-    padding-bottom: 18px;
-
-    border-bottom: 1px solid var(--border);
-}
-.product-card-footer {
-
-    display: flex;
-
-    align-items: center;
-
-    justify-content: space-between;
-
-    padding-top: 18px;
-}
-.product-price {
-
-    color: var(--text);
-
-    font-size: 18px;
+    color: #1D4ED8;
 
     font-weight: 700;
 }
 
 
-.product-price span {
+/* =========================================
+   DELETE BUTTON
+========================================= */
 
-    color: var(--text-muted);
-
-    font-size: 13px;
-
-    font-weight: 400;
-
-    margin-right: 4px;
-}
-.product-actions {
-
-    display: flex;
-
-    align-items: center;
-
-    gap: 8px;
-}
-
-
-.product-actions form {
-
-    margin: 0;
-}
-
-
-.btn-product {
-
-    display: inline-flex;
-
-    align-items: center;
-    justify-content: center;
-
-    padding: 8px 15px;
-
-    border-radius: 7px;
-
-    font-size: 13px;
-
-    text-decoration: none;
-
-    cursor: pointer;
-
-    border: none;
-
-    transition: all 0.2s ease;
-}
-.btn-delete {
+.btn-danger {
 
     background: #FEF2F2;
 
-    color: var(--danger);
-}
+    border-color: #FECACA;
 
-
-.btn-delete:hover {
-
-    background: var(--danger);
-
-    color: white;
-}
-.btn-edit {
-
-    background: #EEF2FF;
-
-    color: var(--primary);
-}
-
-
-.btn-edit:hover {
-
-    background: var(--primary);
-
-    color: white;
-}
-.alert-info {
-
-    background: #EFF6FF;
-
-    border: 1px solid #BFDBFE;
-
-    color: #1D4ED8;
-
-    border-radius: 10px;
-
-    padding: 15px;
-}
-.welcome-box {
-
-    background: var(--card);
-
-    padding: 35px;
-
-    border-radius: 14px;
-
-    border: 1px solid var(--border);
-
-    box-shadow:
-        0 4px 15px rgba(15, 23, 42, 0.05);
-}
-
-
-.welcome-box h1 {
-
-    margin-bottom: 15px;
-
-    font-size: 26px;
-}
-.welcome-box p {
-
-    color: var(--text-muted);
-
-    line-height: 1.8;
-}
-.form-control {
-
-    width: 100%;
-
-    padding: 11px 14px;
-
-    border: 1px solid var(--border);
+    color: #DC2626;
 
     border-radius: 8px;
 
-    background: white;
+    transition: all 0.2s ease;
+}
 
-    color: var(--text);
 
-    outline: none;
+.btn-danger:hover {
+
+    background: #DC2626;
+
+    border-color: #DC2626;
+
+    color: #FFFFFF;
+
+    transform: translateY(-1px);
+}
+
+
+/* =========================================
+   EDIT BUTTON
+========================================= */
+
+.btn-warning {
+
+    background: #FFF7ED;
+
+    border-color: #FED7AA;
+
+    color: #EA580C;
+
+    border-radius: 8px;
 
     transition: all 0.2s ease;
 }
-.form-control:focus {
 
-    border-color: var(--primary);
+
+.btn-warning:hover {
+
+    background: #F97316;
+
+    border-color: #F97316;
+
+    color: #FFFFFF;
+
+    transform: translateY(-1px);
+}
+
+
+/* =========================================
+   INFO ALERT
+========================================= */
+
+.alert-info {
+
+    direction: rtl;
+
+    text-align: center;
+
+    background:
+        linear-gradient(
+            135deg,
+            #EFF6FF,
+            #F0F9FF
+        );
+
+    color: #1E40AF;
+
+    border: 1px solid #BFDBFE;
+
+    border-radius: 10px;
 
     box-shadow:
-        0 0 0 3px rgba(79, 70, 229, 0.1);
-}
-
-ody.dark .product-card {
-
-    background: var(--card);
-
-    border-color: var(--border);
+        0 4px 15px rgba(37, 99, 235, 0.06);
 }
 
 
-body.dark .product-title,
-body.dark .product-price {
+/* =========================================
+   DARK MODE
+========================================= */
 
-    color: white;
+body.dark {
+
+    --background: #0B1120;
+
+    --card: #111827;
+
+    --text: #F8FAFC;
+
+    --text-secondary: #CBD5E1;
+
+    --text-muted: #94A3B8;
+
+    --border: #243244;
+
+    background-color: #0B1120;
+
+    color: #F8FAFC;
 }
 
 
-body.dark .product-id {
+/* =========================================
+   DARK MAIN CONTENT
+========================================= */
 
-    background: #334155;
+body.dark .main-content {
 
-    color: #CBD5E1;
+    direction: rtl;
+    text-align: right;
+
+    background:
+        linear-gradient(
+            135deg,
+            #0B1120 0%,
+            #0F172A 100%
+        );
 }
-body.dark .alert-info {
 
-    background: #1E3A5F;
+
+/* =========================================
+   DARK SIDEBAR
+========================================= */
+
+body.dark .sidebar {
+
+    background:
+        linear-gradient(
+            180deg,
+            #020617 0%,
+            #111827 100%
+        );
+
+    box-shadow:
+        -8px 0 30px rgba(0, 0, 0, 0.30);
+}
+
+
+/* =========================================
+   DARK CARD
+========================================= */
+
+body.dark .card {
+
+    direction: rtl;
+
+    text-align: right;
+
+    background-color: #111827;
+
+    color: #F8FAFC;
+
+    border-color: #243244;
+}
+
+
+body.dark .card:hover {
+
+    border-color: #334155;
+
+    box-shadow:
+        0 12px 30px rgba(0, 0, 0, 0.25);
+}
+
+
+body.dark .card h4 {
+
+    color: #F8FAFC;
+}
+
+
+body.dark .card h5 {
+
+    color: #60A5FA;
+}
+
+
+/* =========================================
+   DARK FORM
+========================================= */
+
+body.dark .form-control {
+
+    direction: rtl;
+
+    text-align: right;
+
+    background-color: #172033;
+
+    color: #F8FAFC;
+
+    border-color: #334155;
+}
+
+
+body.dark .form-control:hover {
+
+    border-color: #475569;
+
+    background-color: #1E293B;
+}
+
+
+body.dark .form-control:focus {
+
+    background-color: #172033;
+
+    color: #FFFFFF;
+
+    border-color: #3B82F6;
+
+    box-shadow:
+        0 0 0 3px rgba(59, 130, 246, 0.15);
+}
+
+
+body.dark .form-control::placeholder {
+
+    direction: rtl;
+
+    text-align: right;
+
+    color: #94A3B8;
+}
+
+
+/* =========================================
+   DARK WELCOME
+========================================= */
+
+body.dark .welcome-box {
+
+    direction: rtl;
+
+    text-align: right;
+
+    background-color: #111827;
+
+    color: #F8FAFC;
+
+    border-color: #243244;
+}
+
+
+body.dark .welcome-box h1 {
+
+    color: #F8FAFC;
+}
+
+
+body.dark .welcome-box p {
+
+    color: #94A3B8;
+}
+
+
+/* =========================================
+   DARK USER CARD
+========================================= */
+
+body.dark .carduser {
+
+    background-color: #111827;
+
+    color: #F8FAFC;
+
+    border-color: #243244;
+}
+
+
+body.dark .textuser {
+
+    color: #F8FAFC;
+}
+
+
+/* =========================================
+   DARK PRIMARY BUTTON
+========================================= */
+
+body.dark .btn-primary {
+
+    background:
+        linear-gradient(
+            135deg,
+            #2563EB,
+            #1D4ED8
+        );
 
     border-color: #2563EB;
 
-    color: #BFDBFE;
+    color: #FFFFFF;
 }
+
+
+/* =========================================
+   DARK DANGER
+========================================= */
+
+body.dark .btn-danger {
+
+    background: rgba(220, 38, 38, 0.12);
+
+    border-color: rgba(248, 113, 113, 0.25);
+
+    color: #F87171;
+}
+
+
+body.dark .btn-danger:hover {
+
+    background: #DC2626;
+
+    border-color: #DC2626;
+
+    color: #FFFFFF;
+}
+
+
+/* =========================================
+   DARK WARNING
+========================================= */
+
+body.dark .btn-warning {
+
+    background: rgba(249, 115, 22, 0.12);
+
+    border-color: rgba(249, 115, 22, 0.25);
+
+    color: #FB923C;
+}
+
+
+body.dark .btn-warning:hover {
+
+    background: #F97316;
+
+    border-color: #F97316;
+
+    color: #FFFFFF;
+}
+
+
+/* =========================================
+   DARK ALERT
+========================================= */
+
+body.dark .alert-info {
+
+    direction: rtl;
+
+    text-align: center;
+
+    background:
+        linear-gradient(
+            135deg,
+            #172554,
+            #1E293B
+        );
+
+    color: #BFDBFE;
+
+    border-color: #1E40AF;
+
+    box-shadow:
+        none;
+}
+
+
+/* =========================================
+   RESPONSIVE
+========================================= */
+
 @media (max-width: 768px) {
 
     .sidebar {
 
-        width: 210px;
+        width: 220px;
     }
 
     .main-content {
 
-        margin-right: 210px;
+        margin-right: 220px;
 
-        padding: 20px;
+        padding: 25px;
     }
 
-    .product-card-footer {
+    .carduser {
 
-        align-items: flex-start;
-
-        flex-direction: column;
-
-        gap: 15px;
+        margin-right: 0;
     }
 
+    .textuser {
+
+        margin-right: 0;
+    }
+
+    .btn-redirect {
+
+        margin-right: 0;
+    }
 }
 
+
+/* =========================================
+   MOBILE
+========================================= */
 
 @media (max-width: 576px) {
 
     .sidebar {
+
         width: 70px;
     }
 
     .sidebar-title {
 
         font-size: 0;
-
     }
 
     .sidebar-menu {
@@ -626,6 +1117,7 @@ body.dark .alert-info {
     .menu-item {
 
         justify-content: center;
+
         padding: 12px;
     }
 
@@ -638,16 +1130,23 @@ body.dark .alert-info {
 
         margin-right: 70px;
 
-        padding: 15px;
+        padding: 20px 15px;
     }
 
-    .page-header {
+    .carduser {
 
-        align-items: flex-start;
+        margin-right: 0;
 
-        flex-direction: column;
-                
-        gap: 15px;
+        padding: 25px;
     }
 
+    .textuser {
+
+        margin-right: 0;
+    }
+
+    .btn-redirect {
+
+        margin-right: 0;
+    }
 }

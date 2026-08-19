@@ -70,7 +70,24 @@ exit;
 <html lang="fa" dir="rtl">
 
 <head>
-
+<script>
+function showResult(str) {
+  if (str.length==0) {
+    document.getElementById("livesearch").innerHTML="";
+    document.getElementById("livesearch").style.border="0px";
+    return;
+  }
+  var xmlhttp=new XMLHttpRequest();
+  xmlhttp.onreadystatechange=function() {
+    if (this.readyState==4 && this.status==200) {
+      document.getElementById("livesearch").innerHTML=this.responseText;
+      document.getElementById("livesearch").style.border="1px solid #A5ACB2";
+    }
+  }
+  xmlhttp.open("GET","livesearch.php?q="+str,true);
+  xmlhttp.send();
+}
+</script>
 <meta charset="UTF-8">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -155,6 +172,7 @@ exit;
 <button
                     type="submit"
                     class="btn btn-success"
+                    onclick="confirmEdit(event)"
                 >
                     ذخیره تغییرات
                 </button>
@@ -177,7 +195,26 @@ exit;
 </form>
 <script src="js/bootstrap.bundle.min.js"></script>
 <script src="js/theme.js"></script>
+<script src="js/sweetalert2.all.min.js"></script>
+<script>
+function confirmEdit(event) {
 
+event.preventDefault();
+
+const form = event.target.closest('form');
+Swal.fire({
+  title: "Do you want to save the changes?",
+  showDenyButton: true,
+  showCancelButton: true,
+  confirmButtonText: "ذخیره شود",
+  denyButtonText: `ذخیره نشود`
+}).then((result) => {
+  /* Read more about isConfirmed, isDenied below */
+  if (result.isConfirmed) Swal.fire("ذخیره شد !", "", "success");
+  else if (result.isDenied) Swal.fire("تغییرات اعمال نشد", "", "info");
+});
+}
+</script>
 </body>
 
 </html>

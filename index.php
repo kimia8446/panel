@@ -16,7 +16,8 @@ if (!isset($_SESSION["username"])) {
 
 
 <link rel="stylesheet" href="style/bootstrap.min.css">
-<link rel="stylesheet" href="style/stiles/Vazirmatn-font-face.css">   
+<link rel="stylesheet"
+          href="style/stiles/Vazirmatn-font-face.css">
 <link rel="stylesheet" href="style/style.css">
     <title>محصولات</title>
 </head>

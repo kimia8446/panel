@@ -29,3 +29,18 @@ if (themeButton) {
         updateThemeButton();
     });
 }
+
+const searchButton = document.getElementById('searchButton');
+const searchForm = document.getElementById('searchForm');
+
+searchButton.addEventListener('click', function () {
+
+    searchForm.classList.toggle('active');
+
+    if (searchForm.classList.contains('active')) {
+
+        searchForm.querySelector('input').focus();
+
+    }
+
+});

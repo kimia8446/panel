@@ -20,14 +20,17 @@ $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 <head>
 
-    <meta charset="UTF-8">
+    <meta charset="UTF-8"/>
 
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 
-    <link rel="stylesheet" href="style/bootstrap.min.css">
-    <link rel="stylesheet" href="style/stiles/Vazirmatn-font-face.css">   
-    <link rel="stylesheet" href="style/style.css">
-    <link rel="stylesheet" href="style/sweetalert2.min.css">
+    <link rel="stylesheet" href="style/bootstrap.min.css"/>
+    <link rel="stylesheet"
+          href="style/stiles/Vazirmatn-font-face.css">
+    <link rel="stylesheet" href="style/style.css"/>
+    <link rel="stylesheet" href="style/sweetalert2.min.css"/>
+    <link rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css"/>
     <title>مشاهده محصولات</title>
 
 </head>
@@ -106,7 +109,7 @@ $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
                 <button
                     type="submit"
-                    class="btn-product btn-delete"
+                    class="btn-product btn-delete btn-danger "
                     onclick="confirmDelete(event)"
                 >
                     حذف
@@ -117,7 +120,6 @@ $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
             <a
                 href="edit.php?id=<?= $product['id'] ?>"
                 class="btn-product btn-edit"
-                onclick="confirmEdit(event)"
             >
                 ویرایش
             </a>
@@ -171,27 +173,7 @@ function confirmDelete(event) {
 
     });
 }
-function confirmEdit(event) {
 
-event.preventDefault();
-
-const link = event.currentTarget;
-
-Swal.fire({
-    title: "اطلاعات ویرایش شود؟",
-    icon: "question",
-    confirmButtonText: "بله",
-    cancelButtonText: "خیر",
-    showCancelButton: true,
-    showCloseButton: true
-}).then((result) => {
-
-    if (result.isConfirmed) {
-        window.location.href = link.href;
-    }
-
-});
-}
 </script>
 </body>
 

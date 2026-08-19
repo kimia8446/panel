@@ -1,23 +1,49 @@
 
 <?php
+
 session_start();
+
 include("aside.php");
 
-
 if (!isset($_SESSION["username"])) {
+
     header("Location: login.php");
     exit;
-}
 
+}
 
 require_once __DIR__ . '/config/database.php';
 
 
-$stmt = $conn->query(
-    "SELECT id, username, phone, created_at
-     FROM users
-     ORDER BY id DESC"
-);
+// ===============================
+// SEARCH
+// ===============================
+
+$search = trim($_GET['search'] ?? '');
+
+if ($search !== '') {
+
+    $stmt = $conn->prepare(
+        "SELECT id, username, phone, created_at
+         FROM users
+         WHERE username LIKE :search
+            OR phone LIKE :search
+         ORDER BY id DESC"
+    );
+
+    $stmt->execute([
+        'search' => "%{$search}%"
+    ]);
+
+} else {
+
+    $stmt = $conn->query(
+        "SELECT id, username, phone, created_at
+         FROM users
+         ORDER BY id DESC"
+    );
+
+}
 
 $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
@@ -31,80 +57,173 @@ $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
     <meta charset="UTF-8">
 
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
 
-    <link rel="stylesheet" href="style/bootstrap.min.css">
-    <link rel="stylesheet" href="style/stiles/Vazirmatn-font-face.css">   
-    <link rel="stylesheet" href="style/style.css">
+    <link rel="stylesheet"
+          href="style/bootstrap.min.css">
 
-    <title>کاربران</title>
+    <link rel="stylesheet"
+          href="style/stiles/Vazirmatn-font-face.css">
+
+    <link rel="stylesheet"
+          href="style/style.css">
+
+    <!-- Bootstrap Icons -->
+
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+
+    <title>
+        کاربران
+    </title>
 
 </head>
 
+
 <body>
 
+<main class="main-content">
 <div class="container mt-5">
 
-    <h2 class="textuser mb-4">
-         اسامی کاربران 
-    </h2>
 
+    <!-- HEADER -->
+
+    <div class="user-page-header">
+
+        <h2 class="textuser">
+
+            اسامی کاربران
+
+        </h2>
+
+
+        <!-- SEARCH -->
+
+        <form
+            action="user.php"
+            method="GET"
+            class="user-search-form">
+
+            <input
+                type="text"
+                name="search"
+                placeholder="جستجوی کاربر..."
+                value="<?= htmlspecialchars($search) ?>"
+                autocomplete="off">
+
+
+            <button
+                type="submit"
+                title="جستجو">
+
+                <i class="bi bi-search"></i>
+
+            </button>
+
+        </form>
+
+    </div>
+
+
+
+    <!-- USERS -->
 
     <?php if (empty($users)): ?>
 
+
         <div class="alert alert-info text-center">
 
-            هنوز کاربری ثبت نام نکرده است.
+            <?php if ($search !== ''): ?>
+
+                کاربری با عبارت
+
+                «<?= htmlspecialchars($search) ?>»
+
+                پیدا نشد.
+
+            <?php else: ?>
+
+                هنوز کاربری ثبت نام نکرده است.
+
+            <?php endif; ?>
 
         </div>
+
 
     <?php else: ?>
 
 
-        <?php foreach ($users as $user): ?>
-      
-            <div class="carduser mb-3">
+        <div class="users-list">
 
-                <div class="card-body">
+    <div class="users-list-header">
 
-                    <h5>
-                        <?= htmlspecialchars($user["username"]) ?>
-                    </h5>
+        <span>نام کاربری</span>
 
-                    <p class="mb-1">
-                        شماره همراه:
-                        <?= htmlspecialchars($user["phone"]) ?>
-                    </p>
+        <span>شماره همراه</span>
 
-                    <small class="text-muted">
+        <span>تاریخ ثبت</span>
 
-                        تاریخ ثبت:
-                        <?= htmlspecialchars($user["created_at"]) ?>
+    </div>
 
-                    </small>
 
-                </div>
+    <?php foreach ($users as $user): ?>
+
+        <div class="user-list-item">
+
+            <div class="user-username">
+
+                <i class="bi bi-person-circle"></i>
+
+                <?= htmlspecialchars($user["username"]) ?>
 
             </div>
 
-        <?php endforeach; ?>
+
+            <div class="user-phone">
+
+                <?= htmlspecialchars($user["phone"]) ?>
+
+            </div>
 
 
+            <div class="user-date">
+
+                <?= htmlspecialchars($user["created_at"]) ?>
+
+            </div>
+
+        </div>
+
+    <?php endforeach; ?>
+
+</div>
     <?php endif; ?>
 
 
-    <a href="dashboard.php" class="btn btn-primary btn-redirect mt-3">
+
+    <!-- BACK BUTTON -->
+
+    <a
+        href="dashboard.php"
+        class="btn btn-primary btn-redirect mt-3">
 
         بازگشت به داشبورد
 
     </a>
 
+
 </div>
 
 
+</div>
+
+</main>
 <script src="js/bootstrap.bundle.min.js"></script>
+
 <script src="js/theme.js"></script>
+
+
 </body>
 
 </html>
-
