@@ -1,4 +1,5 @@
 <?php
+session_start();
 include("config/database.php");
 include("aside.php");
 require_once __DIR__ . '/config/database.php';
@@ -6,11 +7,16 @@ $stmt = $conn->query(
     "SELECT * FROM product"
 );
 $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
-session_start();
 
-if (!isset($_SESSION["username"])) {
+if (
+    !isset($_SESSION["username"]) ||
+    !isset($_SESSION["role"]) ||
+    $_SESSION["role"] !== "admin"
+) {
+
     header("Location: login.php");
     exit;
+
 }
 $username = $_SESSION["username"];
 

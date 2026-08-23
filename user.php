@@ -21,6 +21,70 @@ require_once __DIR__ . '/config/database.php';
 
 $search = trim($_GET['search'] ?? '');
 
+
+// ===============================
+// PAGINATION
+// ===============================
+
+$perPage = 10;
+
+// شماره صفحه فعلی
+$page = isset($_GET['page']) ? (int) $_GET['page'] : 1;
+
+// اگر صفحه کمتر از 1 بود
+if ($page < 1) {
+    $page = 1;
+}
+
+
+// ===============================
+// COUNT USERS
+// ===============================
+
+if ($search !== '') {
+
+    $countStmt = $conn->prepare(
+        "SELECT COUNT(*)
+         FROM users
+         WHERE username LIKE :search
+            OR phone LIKE :search"
+    );
+
+    $countStmt->execute([
+        'search' => "%{$search}%"
+    ]);
+
+} else {
+
+    $countStmt = $conn->query(
+        "SELECT COUNT(*)
+         FROM users"
+    );
+
+}
+
+$totalUsers = $countStmt->fetchColumn();
+
+
+// ===============================
+// CALCULATE PAGINATION
+// ===============================
+
+$totalPages = ceil($totalUsers / $perPage);
+
+// اگر صفحه بیشتر از آخرین صفحه بود
+if ($totalPages > 0 && $page > $totalPages) {
+    $page = $totalPages;
+}
+
+// شروع دریافت اطلاعات
+$offset = ($page - 1) * $perPage;
+
+
+// ===============================
+// GET USERS
+// ===============================
+
 if ($search !== '') {
 
     $stmt = $conn->prepare(
@@ -28,22 +92,55 @@ if ($search !== '') {
          FROM users
          WHERE username LIKE :search
             OR phone LIKE :search
-         ORDER BY id DESC"
+         ORDER BY id DESC
+         LIMIT :offset, :perPage"
     );
 
-    $stmt->execute([
-        'search' => "%{$search}%"
-    ]);
+    $stmt->bindValue(
+        ':search',
+        "%{$search}%",
+        PDO::PARAM_STR
+    );
+
+    $stmt->bindValue(
+        ':offset',
+        $offset,
+        PDO::PARAM_INT
+    );
+
+    $stmt->bindValue(
+        ':perPage',
+        $perPage,
+        PDO::PARAM_INT
+    );
+
+    $stmt->execute();
 
 } else {
 
-    $stmt = $conn->query(
+    $stmt = $conn->prepare(
         "SELECT id, username, phone, created_at
          FROM users
-         ORDER BY id DESC"
+         ORDER BY id DESC
+         LIMIT :offset, :perPage"
     );
 
+    $stmt->bindValue(
+        ':offset',
+        $offset,
+        PDO::PARAM_INT
+    );
+
+    $stmt->bindValue(
+        ':perPage',
+        $perPage,
+        PDO::PARAM_INT
+    );
+
+    $stmt->execute();
+
 }
+
 
 $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
@@ -198,7 +295,81 @@ $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <?php endforeach; ?>
 
 </div>
+<?php if ($totalPages > 1): ?>
+
+<nav class="user-pagination" aria-label="صفحه‌بندی کاربران">
+
+    <ul class="pagination justify-content-center">
+
+
+        <!-- صفحه قبلی -->
+
+        <?php if ($page > 1): ?>
+
+            <li class="page-item">
+
+                <a
+                    class="page-link"
+                    href="?page=<?= $page - 1 ?>&search=<?= urlencode($search) ?>"
+                >
+
+                    <i class="bi bi-chevron-right"></i>
+
+                </a>
+
+            </li>
+
+        <?php endif; ?>
+
+
+        <!-- شماره صفحات -->
+
+        <?php for ($i = 1; $i <= $totalPages; $i++): ?>
+
+            <li
+                class="page-item <?= $i == $page ? 'active' : '' ?>"
+            >
+
+                <a
+                    class="page-link"
+                    href="?page=<?= $i ?>&search=<?= urlencode($search) ?>"
+                >
+
+                    <?= $i ?>
+
+                </a>
+
+            </li>
+
+        <?php endfor; ?>
+
+
+        <!-- صفحه بعد -->
+
+        <?php if ($page < $totalPages): ?>
+
+            <li class="page-item">
+
+                <a
+                    class="page-link"
+                    href="?page=<?= $page + 1 ?>&search=<?= urlencode($search) ?>"
+                >
+
+                    <i class="bi bi-chevron-left"></i>
+
+                </a>
+
+            </li>
+
+        <?php endif; ?>
+
+
+    </ul>
+
+</nav>
+
     <?php endif; ?>
+<?php endif; ?>
 
 
 

@@ -44,3 +44,11 @@ searchButton.addEventListener('click', function () {
     }
 
 });
+function toggleDigital() {
+
+    const subcategories = document.getElementById("digitalSubcategories");
+    const arrow = document.querySelector(".category-arrow");
+
+    subcategories.classList.toggle("show");
+    arrow.classList.toggle("rotate");
+}

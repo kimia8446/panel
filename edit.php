@@ -202,16 +202,22 @@ function confirmEdit(event) {
 event.preventDefault();
 
 const form = event.target.closest('form');
+
 Swal.fire({
-  title: "Do you want to save the changes?",
-  showDenyButton: true,
-  showCancelButton: true,
-  confirmButtonText: "ذخیره شود",
-  denyButtonText: `ذخیره نشود`
+    title: "آیا از ذخیره تغییرات مطمئنی؟",
+    icon: "question",
+    showCancelButton: true,
+    confirmButtonText: "ذخیره شود",
+    cancelButtonText: "انصراف"
 }).then((result) => {
-  /* Read more about isConfirmed, isDenied below */
-  if (result.isConfirmed) Swal.fire("ذخیره شد !", "", "success");
-  else if (result.isDenied) Swal.fire("تغییرات اعمال نشد", "", "info");
+
+    if (result.isConfirmed) {
+
+        // فرم را واقعاً ارسال می‌کند
+        form.submit();
+
+    }
+
 });
 }
 </script>

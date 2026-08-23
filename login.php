@@ -1,4 +1,3 @@
-
 <?php
 
 session_start();
@@ -7,15 +6,10 @@ require_once __DIR__ . '/config/database.php';
 
 $error = "";
 
-
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
-   
     $username = trim($_POST["username"] ?? "");
     $password = $_POST["password"] ?? "";
-
-
-   
 
     if ($username === "") {
 
@@ -35,8 +29,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
     } else {
 
-        
-
+        // پیدا کردن کاربر
         $stmt = $conn->prepare(
             "SELECT * FROM users WHERE username = :username"
         );
@@ -48,22 +41,40 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
 
-        
+        // بررسی کاربر و رمز عبور
         if ($user && password_verify($password, $user["password"])) {
 
-
+            // ذخیره اطلاعات کاربر در Session
             $_SESSION["username"] = $user["username"];
             $_SESSION["user_id"] = $user["id"];
+            $_SESSION["role"] = $user["role"];
 
-            header("Location: shop.php");
-            exit;
+
+            // اگر ادمین بود
+            if ($user["role"] === "admin") {
+
+                header("Location: dashboard.php");
+                exit;
+
+            }
+
+
+            // اگر کاربر معمولی بود
+            else {
+
+                header("Location: shop.php");
+                exit;
+
+            }
 
         } else {
 
-          
             $error = "نام کاربری یا رمز عبور اشتباه است.";
+
         }
+
     }
+
 }
 
 ?>

@@ -3456,3 +3456,314 @@ body.dark .shop-empty p {
 .main-content > .container {
     max-width: 100%;
 }
+/* دسته‌بندی کالای دیجیتال */
+.category-digital {
+    width: 100%;
+}
+
+
+/* زیر دسته‌ها */
+.digital-subcategories {
+    max-height: 0;
+    overflow: hidden;
+    opacity: 0;
+    padding-right: 45px;
+    transition: 
+        max-height 0.35s ease,
+        opacity 0.25s ease;
+}
+
+
+/* وقتی باز می‌شود */
+.digital-subcategories.show {
+    max-height: 200px;
+    opacity: 1;
+}
+
+
+/* زیر دسته */
+.subcategory-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    padding: 9px 15px;
+
+    text-decoration: none;
+
+    font-size: 14px;
+
+    transition: 
+        background-color 0.2s ease,
+        transform 0.2s ease;
+}
+
+
+/* حرکت هنگام هاور */
+.subcategory-item:hover {
+    transform: translateX(-5px);
+}
+
+
+/* فلش */
+.category-arrow {
+    margin-right: auto;
+    transition: transform 0.3s ease;
+}
+
+
+/* چرخش فلش هنگام باز شدن */
+.category-arrow.rotate {
+    transform: rotate(180deg);
+}
+/* =========================================
+   SHOP NAVBAR - DARK MODE
+========================================= */
+
+body.dark .shop-navbar {
+
+    background: #111827;
+
+    border-bottom-color: #1E293B;
+
+    box-shadow:
+        0 4px 20px rgba(0, 0, 0, 0.30);
+}
+
+
+/* =========================================
+   LOGO
+========================================= */
+
+body.dark .shop-logo {
+
+    color: #F8FAFC;
+}
+
+
+body.dark .shop-logo:hover {
+
+    color: #60A5FA;
+}
+
+
+/* =========================================
+   MENU
+========================================= */
+
+body.dark .shop-menu-link {
+
+    color: #94A3B8;
+}
+
+
+body.dark .shop-menu-link:hover {
+
+    background: #172554;
+
+    color: #60A5FA;
+}
+
+
+body.dark .shop-menu-link.active {
+
+    background: #172554;
+
+    color: #60A5FA;
+}
+
+
+/* =========================================
+   NAVBAR ICON BUTTON
+========================================= */
+
+body.dark .shop-nav-icon {
+
+    background: #1E293B;
+
+    border-color: #334155;
+
+    color: #CBD5E1;
+}
+
+
+body.dark .shop-nav-icon:hover {
+
+    background: #172554;
+
+    color: #60A5FA;
+}
+
+
+/* =========================================
+   THEME BUTTON
+========================================= */
+
+body.dark .shop-theme-button {
+
+    background: #1E293B;
+
+    border-color: #334155;
+
+    color: #F8FAFC;
+}
+
+
+body.dark .shop-theme-button:hover {
+
+    background: #334155;
+
+    border-color: #475569;
+
+    color: #60A5FA;
+}
+
+
+/* =========================================
+   USER BUTTON
+========================================= */
+
+body.dark .shop-user-button {
+
+    background: #1E293B;
+
+    border-color: #334155;
+
+    color: #F8FAFC;
+}
+
+
+body.dark .shop-user-button:hover {
+
+    background: #273449;
+
+    border-color: #475569;
+}
+
+
+body.dark .user-avatar {
+
+    background: #172554;
+
+    color: #60A5FA;
+}
+
+
+body.dark .shop-user-button > i {
+
+    color: #94A3B8;
+}
+
+
+/* =========================================
+   DROPDOWN
+========================================= */
+
+body.dark .shop-dropdown {
+
+    background: #111827;
+
+    border-color: #334155;
+
+    box-shadow:
+        0 15px 35px rgba(0, 0, 0, 0.40);
+}
+
+
+body.dark .dropdown-user-info strong {
+
+    color: #F8FAFC;
+}
+
+
+body.dark .dropdown-user-info small {
+
+    color: #94A3B8;
+}
+
+
+body.dark .dropdown-avatar {
+
+    background: #172554;
+
+    color: #60A5FA;
+}
+
+
+body.dark .shop-dropdown .dropdown-item {
+
+    color: #CBD5E1;
+}
+
+
+body.dark .shop-dropdown .dropdown-item:hover {
+
+    background: #172554;
+
+    color: #60A5FA;
+}
+
+
+/* =========================================
+   LOGOUT
+========================================= */
+
+body.dark .shop-dropdown .logout-link {
+
+    color: #F87171;
+}
+
+
+body.dark .shop-dropdown .logout-link:hover {
+
+    background: #3F1D1D;
+
+    color: #FCA5A5;
+}
+
+
+/* =========================================
+   CART
+========================================= */
+
+body.dark .cart-button {
+
+    background: #172554;
+
+    color: #60A5FA;
+}
+
+
+body.dark .cart-button:hover {
+
+    background: #1E3A8A;
+
+    color: #93C5FD;
+}
+
+
+/* =========================================
+   SEARCH
+========================================= */
+
+body.dark .shop-search-form {
+
+    background: #111827;
+
+    border: 1px solid #334155;
+
+    box-shadow:
+        0 10px 30px rgba(0, 0, 0, 0.40);
+}
+
+
+body.dark .shop-search-form input {
+
+    color: #F8FAFC;
+}
+
+
+body.dark .shop-search-form input::placeholder {
+
+    color: #94A3B8;
+}

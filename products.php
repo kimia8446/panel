@@ -1,15 +1,21 @@
 <?php
-session_start();
-include("aside.php");
 
-if (!isset($_SESSION["username"])) {
+session_start();
+
+if (
+    !isset($_SESSION["username"]) ||
+    !isset($_SESSION["role"]) ||
+    $_SESSION["role"] !== "admin"
+) {
+
     header("Location: login.php");
     exit;
+
 }
 
 require_once __DIR__ . '/config/database.php';
 
-$stmt = $conn->query("SELECT * FROM product");
+$stmt = $conn->query("SELECT * FROM product ORDER BY id DESC");
 
 $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
@@ -20,161 +26,419 @@ $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 <head>
 
-    <meta charset="UTF-8"/>
+    <meta charset="UTF-8">
 
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <link rel="stylesheet" href="style/bootstrap.min.css"/>
+    <link rel="stylesheet" href="style/bootstrap.min.css">
+
     <link rel="stylesheet"
           href="style/stiles/Vazirmatn-font-face.css">
-    <link rel="stylesheet" href="style/style.css"/>
-    <link rel="stylesheet" href="style/sweetalert2.min.css"/>
+
     <link rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css"/>
+          href="style/style.css">
+
+    <link rel="stylesheet"
+          href="style/sweetalert2.min.css">
+
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+
     <title>مشاهده محصولات</title>
 
 </head>
 
+
 <body>
+
+<?php include("aside.php"); ?>
+
+
 <main class="main-content">
 
     <div class="container-fluid">
-          <div class="container mt-5">
-
-          <div class="page-header">
-
-<h2>
-    لیست محصولات
-</h2>
-
-<a href="index.php" class="btn btn-primary">
-    افزودن محصول جدید
-</a>
-
-</div>
 
 
+        <!-- =====================================
+             PAGE HEADER
+        ====================================== -->
 
-    <?php if (empty($products)): ?>
+        <div class="products-page-header">
 
-        <div class="alert alert-info text-center">
-            هنوز محصولی ثبت نشده است.
-        </div>
+            <div>
 
-    <?php else: ?>
+                <span class="products-page-label">
+                    مدیریت فروشگاه
+                </span>
 
-        <?php foreach ($products as $product): ?>
+                <h2>
+                    محصولات
+                </h2>
 
-<div class="product-card">
+                <p>
+                    لیست محصولات ثبت شده در فروشگاه
+                </p>
 
-    <div class="product-card-header">
+            </div>
 
-        <div>
-            <span class="product-label">محصول</span>
 
-            <h4 class="product-title">
-                <?= htmlspecialchars($product['name']) ?>
-            </h4>
-        </div>
+            <a href="index.php"
+               class="btn btn-primary">
 
-        <span class="product-id">
-            #<?= $product['id'] ?>
-        </span>
+                <i class="bi bi-plus-lg"></i>
 
-    </div>
+                افزودن محصول جدید
 
-    <div class="product-description">
-        <?= htmlspecialchars($product['descripe']) ?>
-    </div>
-
-    <div class="product-card-footer">
-
-        <div class="product-price">
-            <?= number_format($product['price']) ?>
-            <span>تومان</span>
-        </div>
-
-        <div class="product-actions">
-
-            <form
-                action="delete.php"
-                method="POST"
-            >
-
-                <input
-                    type="hidden"
-                    name="id"
-                    value="<?= $product['id'] ?>"
-                >
-
-                <button
-                    type="submit"
-                    class="btn-product btn-delete btn-danger "
-                    onclick="confirmDelete(event)"
-                >
-                    حذف
-                </button>
-
-            </form>
-
-            <a
-                href="edit.php?id=<?= $product['id'] ?>"
-                class="btn-product btn-edit"
-            >
-                ویرایش
             </a>
 
         </div>
 
+
+
+        <!-- =====================================
+             PRODUCTS TABLE
+        ====================================== -->
+
+        <?php if (empty($products)): ?>
+
+            <div class="alert alert-info text-center">
+
+                <i class="bi bi-box-seam"></i>
+
+                هنوز محصولی ثبت نشده است.
+
+            </div>
+
+        <?php else: ?>
+
+
+            <div class="products-table-card">
+
+
+                <!-- TABLE HEADER -->
+
+                <div class="products-table-header">
+
+                    <div>
+
+                        <h4>
+                            لیست محصولات
+                        </h4>
+
+                        <span>
+                            <?= count($products) ?> محصول
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- RESPONSIVE TABLE -->
+
+                <div class="table-responsive">
+
+                    <table class="table products-table align-middle mb-0">
+
+
+                        <thead>
+
+                        <tr>
+
+                            <th>
+                                #
+                            </th>
+
+                            <th>
+                                نام محصول
+                            </th>
+
+                            <th>
+                                توضیحات
+                            </th>
+
+                            <th>
+                                قیمت
+                            </th>
+
+                            <th class="text-center">
+                                عملیات
+                            </th>
+
+                        </tr>
+
+                        </thead>
+
+
+                        <tbody>
+
+
+                        <?php foreach ($products as $product): ?>
+
+
+                            <tr>
+
+
+                                <!-- ID -->
+
+                                <td>
+
+                                    <span class="product-number">
+
+                                        #<?= $product['id'] ?>
+
+                                    </span>
+
+                                </td>
+
+
+
+                                <!-- NAME -->
+
+                                <td>
+
+                                    <div class="product-name">
+
+                                        <div class="product-icon">
+
+                                            <i class="bi bi-box-seam"></i>
+
+                                        </div>
+
+                                        <strong>
+
+                                            <?= htmlspecialchars($product['name']) ?>
+
+                                        </strong>
+
+                                    </div>
+
+                                </td>
+
+
+
+                                <!-- DESCRIPTION -->
+
+                                <td>
+
+                                    <div class="product-description-table">
+
+                                        <?= htmlspecialchars($product['descripe']) ?>
+
+                                    </div>
+
+                                </td>
+
+
+
+                                <!-- PRICE -->
+
+                                <td>
+
+                                    <div class="product-price-table">
+
+                                        <?= number_format($product['price']) ?>
+
+                                        <span>
+                                            تومان
+                                        </span>
+
+                                    </div>
+
+                                </td>
+
+
+
+                                <!-- ACTIONS -->
+
+                                <td>
+
+                                    <div class="product-actions-table">
+
+
+                                        <!-- EDIT -->
+
+                                        <a
+                                            href="edit.php?id=<?= $product['id'] ?>"
+                                            class="btn btn-sm btn-warning product-edit-btn"
+                                            onclick="confirmEdit(event)"
+                                        >
+
+                                            <i class="bi bi-pencil"></i>
+
+                                            ویرایش
+
+                                        </a>
+
+
+
+                                        <!-- DELETE -->
+
+                                        <form
+                                            action="delete.php"
+                                            method="POST"
+                                            class="d-inline"
+                                        >
+
+                                            <input
+                                                type="hidden"
+                                                name="id"
+                                                value="<?= $product['id'] ?>"
+                                            >
+
+                                            <button
+                                                type="submit"
+                                                class="btn btn-sm btn-danger product-delete-btn"
+                                                onclick="confirmDelete(event)"
+                                            >
+
+                                                <i class="bi bi-trash"></i>
+
+                                                حذف
+
+                                            </button>
+
+                                        </form>
+
+
+                                    </div>
+
+                                </td>
+
+
+                            </tr>
+
+
+                        <?php endforeach; ?>
+
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </div>
+
+
+        <?php endif; ?>
+
+
     </div>
 
-</div>
+</main>
 
-<?php endforeach; ?>
-    <?php endif; ?>
 
-   </div>
-   </div>
 
-        </main>
-    
 <script src="js/bootstrap.bundle.min.js"></script>
+
 <script src="js/theme.js"></script>
+
 <script src="js/sweetalert2.all.min.js"></script>
 
+
 <script>
+
+
+/* =========================================
+   DELETE CONFIRM
+========================================= */
+
 const swalWithBootstrapButtons = Swal.mixin({
+
     customClass: {
-        confirmButton: "btn btn-success",
-        cancelButton: "btn btn-danger"
+
+        confirmButton: "btn btn-success mx-2",
+
+        cancelButton: "btn btn-danger mx-2"
+
     },
+
     buttonsStyling: false
+
 });
+
 
 function confirmDelete(event) {
 
     event.preventDefault();
 
-    const form = event.target.closest('form');
+    const form = event.target.closest("form");
+
 
     swalWithBootstrapButtons.fire({
+
         title: "آیا مطمئن هستید؟",
-        text: "این محصول حذف خواهد شد و قابل بازگشت نیست!",
+
+        text: "این محصول حذف خواهد شد و قابل بازگشت نیست.",
+
         icon: "warning",
+
         showCancelButton: true,
+
         confirmButtonText: "بله، حذف کن",
+
         cancelButtonText: "لغو",
+
         reverseButtons: true
+
     }).then((result) => {
 
         if (result.isConfirmed) {
+
             form.submit();
+
         }
 
     });
+
+}
+
+
+
+/* =========================================
+   EDIT CONFIRM
+========================================= */
+
+function confirmEdit(event) {
+
+    event.preventDefault();
+
+    const link = event.currentTarget;
+
+
+    Swal.fire({
+
+        title: "ویرایش محصول؟",
+
+        text: "اطلاعات این محصول ویرایش شود؟",
+
+        icon: "question",
+
+        showCancelButton: true,
+
+        confirmButtonText: "بله، ویرایش",
+
+        cancelButtonText: "لغو",
+
+        reverseButtons: true
+
+    }).then((result) => {
+
+        if (result.isConfirmed) {
+
+            window.location.href = link.href;
+
+        }
+
+    });
+
 }
 
 </script>
+
+
 </body>
 
 </html>

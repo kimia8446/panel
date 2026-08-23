@@ -1,5 +1,14 @@
 <?php
+session_start();
 
+require_once __DIR__ . '/config/database.php';
+
+if (!isset($_SESSION["username"])) {
+
+    header("Location: login.php");
+    exit;
+
+}
 require_once __DIR__ . '/config/database.php';
 
 if (!isset($_GET['id']) || !is_numeric($_GET['id'])) {

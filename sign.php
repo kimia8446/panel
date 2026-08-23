@@ -1,18 +1,3 @@
-<!DOCTYPE Html>
-<html lang ="fa" dir="rtl">
-<head>
-<meta charset="UTF-8">
-
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<link rel="stylesheet" href="style/bootstrap.min.css">
-<link rel="stylesheet" href="style/stiles/Vazirmatn-font-face.css">   
-<link rel="stylesheet" href="style/style.css">
-    <title>ثبت نام </title>
-</head>
-<body>
-<body>
-
 <?php
 session_start();
 
@@ -74,8 +59,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
             
             $stmt = $conn->prepare(
-                "INSERT INTO users (username, phone, password)
-                 VALUES (:username, :phone, :password)"
+                "INSERT INTO users (username, phone, password, role)
+                 VALUES (:username, :phone, :password ,'user')"
             );
 
             $stmt->execute([
@@ -92,8 +77,21 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         }
     }
 }
-
 ?>
+<!DOCTYPE Html>
+<html lang ="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<link rel="stylesheet" href="style/bootstrap.min.css">
+<link rel="stylesheet" href="style/stiles/Vazirmatn-font-face.css">   
+<link rel="stylesheet" href="style/style.css">
+    <title>ثبت نام </title>
+</head>
+<body>
+<body>
 <div class="container p-5">
     <section class="d-flex justify-content-center align-item-center min-vh-100">
         <fieldset>

@@ -3,7 +3,7 @@
 session_start();
 
 if (!isset($_SESSION["username"])) {
-    header("Location: login.php");
+    header("Location: shop.php");
     exit;
 }
 
@@ -36,7 +36,7 @@ include("aside.php");
 
                   </h1>
                   <label for="name" class="form-label">اسم محصول</label>
-                  <input type = "text" id="name" name= "product_name" class ="form-control mb-3" placeholder="نام" maxlength="10" minlength="3"  pattern="[آ-ی]+" >
+                  <input type = "text" id="name" name= "product_name" class ="form-control mb-3" placeholder="نام" maxlength="10" minlength="3"  " >
                 </div>
                 <div>
                    <label for="description" class="form-label">توضیحات</label>

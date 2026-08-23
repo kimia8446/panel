@@ -1,4 +1,26 @@
 
+<?php if (
+    isset($_SESSION["role"]) &&
+    $_SESSION["role"] === "admin"
+): ?>
+
+    <a href="dashboard.php" class="menu-item">
+        <span>داشبورد</span>
+    </a>
+
+    <a href="products.php" class="menu-item">
+        <span>مشاهده محصولات</span>
+    </a>
+
+    <a href="index.php" class="menu-item">
+        <span>افزودن محصول</span>
+    </a>
+
+    <a href="user.php" class="menu-item">
+        <span>کاربران</span>
+    </a>
+
+<?php endif; ?>
 <aside class="sidebar">
 
     <div class="sidebar-title">

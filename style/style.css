@@ -1150,3 +1150,531 @@ body.dark .alert-info {
         margin-right: 0;
     }
 }
+/* =========================================
+   PRODUCTS PAGE
+========================================= */
+
+.products-page-header {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    margin-bottom: 25px;
+
+    padding: 25px;
+
+    background: var(--card);
+
+    border: 1px solid var(--border);
+
+    border-radius: 15px;
+
+}
+
+
+.products-page-label {
+
+    display: block;
+
+    margin-bottom: 5px;
+
+    color: var(--primary);
+
+    font-size: 12px;
+
+    font-weight: 700;
+
+}
+
+
+.products-page-header h2 {
+
+    margin: 0 0 5px;
+
+    color: var(--text);
+
+    font-size: 25px;
+
+    font-weight: 800;
+
+}
+
+
+.products-page-header p {
+
+    margin: 0;
+
+    color: var(--text-muted);
+
+    font-size: 12px;
+
+}
+
+
+.products-page-header .btn {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 7px;
+
+}
+
+
+/* =========================================
+   TABLE CARD
+========================================= */
+
+.products-table-card {
+
+    overflow: hidden;
+
+    background: var(--card);
+
+    border: 1px solid var(--border);
+
+    border-radius: 15px;
+
+    box-shadow:
+        0 5px 20px rgba(15, 23, 42, 0.05);
+
+}
+
+
+/* =========================================
+   TABLE HEADER
+========================================= */
+
+.products-table-header {
+
+    padding: 20px 25px;
+
+    border-bottom: 1px solid var(--border);
+
+}
+
+
+.products-table-header > div {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 12px;
+
+}
+
+
+.products-table-header h4 {
+
+    margin: 0;
+
+    color: var(--text);
+
+    font-size: 16px;
+
+    font-weight: 800;
+
+}
+
+
+.products-table-header span {
+
+    padding: 4px 9px;
+
+    border-radius: 20px;
+
+    background: var(--primary-light);
+
+    color: var(--primary);
+
+    font-size: 10px;
+
+    font-weight: 700;
+
+}
+
+
+/* =========================================
+   TABLE
+========================================= */
+
+.products-table {
+
+    color: var(--text);
+
+}
+
+
+.products-table thead {
+
+    background: #F8FAFC;
+
+}
+
+
+.products-table th {
+
+    padding: 16px 20px;
+
+    color: #64748B;
+
+    border-bottom: 1px solid var(--border);
+
+    font-size: 12px;
+
+    font-weight: 700;
+
+    white-space: nowrap;
+
+}
+
+
+.products-table td {
+
+    padding: 17px 20px;
+
+    border-color: var(--border);
+
+    color: var(--text);
+
+    font-size: 12px;
+
+}
+
+
+.products-table tbody tr {
+
+    transition: all 0.2s ease;
+
+}
+
+
+.products-table tbody tr:hover {
+
+    background: #F8FAFC;
+
+}
+
+
+/* =========================================
+   PRODUCT NUMBER
+========================================= */
+
+.product-number {
+
+    display: inline-flex;
+
+    padding: 5px 8px;
+
+    border-radius: 6px;
+
+    background: #F1F5F9;
+
+    color: #64748B;
+
+    font-size: 10px;
+
+    direction: ltr;
+
+}
+
+
+/* =========================================
+   PRODUCT NAME
+========================================= */
+
+.product-name {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 12px;
+
+}
+
+
+.product-icon {
+
+    width: 40px;
+
+    height: 40px;
+
+    flex-shrink: 0;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    border-radius: 9px;
+
+    background: var(--primary-light);
+
+    color: var(--primary);
+
+    font-size: 17px;
+
+}
+
+
+.product-name strong {
+
+    color: var(--text);
+
+    font-size: 13px;
+
+}
+
+
+/* =========================================
+   DESCRIPTION
+========================================= */
+
+.product-description-table {
+
+    max-width: 330px;
+
+    overflow: hidden;
+
+    color: var(--text-muted);
+
+    line-height: 1.8;
+
+    white-space: nowrap;
+
+    text-overflow: ellipsis;
+
+}
+
+
+/* =========================================
+   PRICE
+========================================= */
+
+.product-price-table {
+
+    color: var(--text);
+
+    font-size: 14px;
+
+    font-weight: 800;
+
+    white-space: nowrap;
+
+}
+
+
+.product-price-table span {
+
+    margin-right: 3px;
+
+    color: var(--text-muted);
+
+    font-size: 10px;
+
+    font-weight: 400;
+
+}
+
+
+/* =========================================
+   ACTIONS
+========================================= */
+
+.product-actions-table {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 7px;
+
+}
+
+
+.product-edit-btn,
+.product-delete-btn {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 5px;
+
+    min-width: 75px;
+
+    border-radius: 7px;
+
+}
+
+
+/* =========================================
+   DARK MODE
+========================================= */
+
+body.dark .products-table thead {
+
+    background: #1E293B;
+
+}
+
+
+body.dark .products-table tbody tr:hover {
+
+    background: #1E293B;
+
+}
+
+
+body.dark .product-number {
+
+    background: #1E293B;
+
+    color: #94A3B8;
+
+}
+
+
+/* =========================================
+   RESPONSIVE
+========================================= */
+
+@media (max-width: 768px) {
+
+    .products-page-header {
+
+        flex-direction: column;
+
+        align-items: flex-start;
+
+        gap: 20px;
+
+    }
+
+
+    .products-page-header .btn {
+
+        width: 100%;
+
+        justify-content: center;
+
+    }
+
+
+    .products-table th,
+    .products-table td {
+
+        padding: 13px 15px;
+
+    }
+
+
+    .product-description-table {
+
+        max-width: 200px;
+
+    }
+
+}
+
+
+@media (max-width: 576px) {
+
+    .products-page-header {
+
+        padding: 18px;
+
+    }
+
+
+    .products-page-header h2 {
+
+        font-size: 21px;
+
+    }
+
+
+    .products-table-header {
+
+        padding: 17px;
+
+    }
+
+
+    .product-actions-table {
+
+        flex-direction: column;
+
+        align-items: stretch;
+
+    }
+
+
+    .product-edit-btn,
+    .product-delete-btn {
+
+        width: 80px;
+
+    }
+
+}
+/* =========================
+   USER PAGINATION
+========================= */
+
+.user-pagination {
+    margin-top: 30px;
+    margin-bottom: 20px;
+}
+
+.user-pagination .pagination {
+    gap: 6px;
+}
+
+.user-pagination .page-link {
+    width: 40px;
+    height: 40px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 10px !important;
+
+    border: 1px solid #ddd;
+
+    color: #1F3A5F;
+
+    background-color: #fff;
+
+    font-family: "Vazirmatn", sans-serif;
+
+    transition: all 0.2s ease;
+}
+
+.user-pagination .page-link:hover {
+    background-color: #1F3A5F;
+    color: #fff;
+    border-color: #1F3A5F;
+}
+
+.user-pagination .page-item.active .page-link {
+    background-color: #1F3A5F;
+    border-color: #1F3A5F;
+    color: #fff;
+}
+
+.user-pagination .page-item.disabled .page-link {
+    opacity: 0.5;
+}

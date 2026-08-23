@@ -44,8 +44,8 @@ while (($row = fgetcsv($file)) !== false) {
 
     // ذخیره کاربر
     $stmt = $conn->prepare(
-        "INSERT INTO users (username, phone, password)
-         VALUES (:username, :phone, :password)"
+        "INSERT INTO users (username, phone, password , role)
+         VALUES (:username, :phone, :password , 'user')"
     );
 
     $stmt->execute([

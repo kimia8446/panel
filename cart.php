@@ -6,6 +6,31 @@ require_once __DIR__ . '/config/database.php';
 
 
 /* =========================================
+   CHECK LOGIN
+========================================= */
+
+if (!isset($_SESSION["username"])) {
+
+    header("Location: login.php");
+    exit;
+
+}
+
+
+/* =========================================
+   CSRF TOKEN
+========================================= */
+
+if (!isset($_SESSION['csrf_token'])) {
+
+    $_SESSION['csrf_token'] = bin2hex(
+        random_bytes(32)
+    );
+
+}
+
+
+/* =========================================
    INITIAL CART
 ========================================= */
 
@@ -22,11 +47,31 @@ if (!isset($_SESSION['cart'])) {
 
 if (
     isset($_POST['add_to_cart']) &&
-    isset($_POST['product_id'])
+    isset($_POST['product_id']) &&
+    isset($_POST['csrf_token'])
 ) {
+
+
+    /* ---------- CHECK CSRF ---------- */
+
+    if (
+        !hash_equals(
+            $_SESSION['csrf_token'],
+            $_POST['csrf_token']
+        )
+    ) {
+
+        die("Invalid CSRF Token");
+
+    }
+
+
+    /* ---------- GET PRODUCT ID ---------- */
 
     $productId = (int) $_POST['product_id'];
 
+
+    /* ---------- GET PRODUCT ---------- */
 
     $stmt = $conn->prepare("
         SELECT *
@@ -39,9 +84,45 @@ if (
     $product = $stmt->fetch(PDO::FETCH_ASSOC);
 
 
+    /* ---------- CHECK PRODUCT ---------- */
+
     if ($product) {
 
+
+        /* ---------- CHECK IF ALREADY IN CART ---------- */
+
+        if (isset($_SESSION['cart'][$productId])) {
+
+            header("Location: cart.php");
+            exit;
+
+        }
+
+
+        /* ---------- CHECK STOCK ---------- */
+
+        if ($product['stock'] <= 0) {
+
+            die("این محصول موجود نیست.");
+
+        }
+
+
+        /* ---------- ADD TO CART ---------- */
+
         $_SESSION['cart'][$productId] = 1;
+
+
+        /* ---------- DECREASE STOCK ---------- */
+
+        $stmt = $conn->prepare("
+            UPDATE product
+            SET stock = stock - 1
+            WHERE id = ?
+            AND stock > 0
+        ");
+
+        $stmt->execute([$productId]);
 
     }
 
@@ -53,17 +134,57 @@ if (
 
 
 /* =========================================
-   REMOVE
+   REMOVE FROM CART
 ========================================= */
 
 if (
-    isset($_GET['remove']) &&
-    is_numeric($_GET['remove'])
+    isset($_POST['remove_from_cart']) &&
+    isset($_POST['product_id']) &&
+    isset($_POST['csrf_token'])
 ) {
 
-    $productId = (int) $_GET['remove'];
 
-    unset($_SESSION['cart'][$productId]);
+    /* ---------- CHECK CSRF ---------- */
+
+    if (
+        !hash_equals(
+            $_SESSION['csrf_token'],
+            $_POST['csrf_token']
+        )
+    ) {
+
+        die("Invalid CSRF Token");
+
+    }
+
+
+    /* ---------- GET PRODUCT ID ---------- */
+
+    $productId = (int) $_POST['product_id'];
+
+
+    /* ---------- CHECK IF PRODUCT IS IN CART ---------- */
+
+    if (isset($_SESSION['cart'][$productId])) {
+
+
+        /* ---------- RETURN STOCK ---------- */
+
+        $stmt = $conn->prepare("
+            UPDATE product
+            SET stock = stock + 1
+            WHERE id = ?
+        ");
+
+        $stmt->execute([$productId]);
+
+
+        /* ---------- REMOVE FROM CART ---------- */
+
+        unset($_SESSION['cart'][$productId]);
+
+    }
+
 
     header("Location: cart.php");
     exit;
@@ -83,6 +204,7 @@ $total = 0;
 if (!empty($_SESSION['cart'])) {
 
     $ids = array_keys($_SESSION['cart']);
+
 
     $placeholders = implode(
         ',',
@@ -112,6 +234,7 @@ if (!empty($_SESSION['cart'])) {
 ?>
 
 <!DOCTYPE html>
+
 <html lang="fa" dir="rtl">
 
 <head>
@@ -152,7 +275,9 @@ if (!empty($_SESSION['cart'])) {
                class="shop-logo">
 
                 <span class="logo-icon">
+
                     <i class="bi bi-bag-heart-fill"></i>
+
                 </span>
 
                 فروشگاه من
@@ -286,13 +411,40 @@ if (!empty($_SESSION['cart'])) {
                             </div>
 
 
-                            <a
-                                href="cart.php?remove=<?= $product['id'] ?>"
-                                class="remove-cart">
+                            <!-- REMOVE FROM CART -->
 
-                                <i class="bi bi-trash"></i>
+                            <form
+                                action="cart.php"
+                                method="POST"
+                            >
 
-                            </a>
+                                <input
+                                    type="hidden"
+                                    name="product_id"
+                                    value="<?= $product['id'] ?>"
+                                >
+
+
+                                <input
+                                    type="hidden"
+                                    name="csrf_token"
+                                    value="<?= htmlspecialchars(
+                                        $_SESSION['csrf_token']
+                                    ) ?>"
+                                >
+
+
+                                <button
+                                    type="submit"
+                                    name="remove_from_cart"
+                                    class="remove-cart"
+                                >
+
+                                    <i class="bi bi-trash"></i>
+
+                                </button>
+
+                            </form>
 
 
                         </div>

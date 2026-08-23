@@ -4,44 +4,114 @@ session_start();
 
 require_once __DIR__ . '/config/database.php';
 
-if (!isset($_SESSION["username"])) {
 
-    header("Location: login.php");
-    exit;
+
+/* =========================================
+   CSRF TOKEN
+========================================= */
+
+if (!isset($_SESSION['csrf_token'])) {
+
+    $_SESSION['csrf_token'] = bin2hex(
+        random_bytes(32)
+    );
 
 }
+
 
 $username = $_SESSION["username"];
 
+
+/* =========================================
+   SEARCH
+========================================= */
+
 $search = trim($_GET['search'] ?? '');
+
+
+/* =========================================
+   CATEGORY
+========================================= */
+
+$categoryId = filter_input(
+    INPUT_GET,
+    'category',
+    FILTER_VALIDATE_INT
+);
+
+
+/* =========================================
+   GET PRODUCTS
+========================================= */
 
 if ($search !== '') {
 
-    $stmt = $conn->prepare("
-        SELECT *
-        FROM product
-        WHERE name LIKE :search
-           OR descripe LIKE :search
-        ORDER BY id DESC
-    ");
+    if ($categoryId) {
 
-    $stmt->execute([
-        'search' => "%{$search}%"
-    ]);
+        $stmt = $conn->prepare("
+            SELECT *
+            FROM product
+            WHERE category_id = :category_id
+            AND (
+                name LIKE :search
+                OR descripe LIKE :search
+            )
+            ORDER BY id DESC
+        ");
+
+        $stmt->execute([
+            'category_id' => $categoryId,
+            'search' => "%{$search}%"
+        ]);
+
+    } else {
+
+        $stmt = $conn->prepare("
+            SELECT *
+            FROM product
+            WHERE name LIKE :search
+               OR descripe LIKE :search
+            ORDER BY id DESC
+        ");
+
+        $stmt->execute([
+            'search' => "%{$search}%"
+        ]);
+
+    }
 
 } else {
 
-    $stmt = $conn->query("
-        SELECT *
-        FROM product
-        ORDER BY id DESC
-    ");
+    if ($categoryId) {
+
+        $stmt = $conn->prepare("
+            SELECT *
+            FROM product
+            WHERE category_id = :category_id
+            ORDER BY id DESC
+        ");
+
+        $stmt->execute([
+            'category_id' => $categoryId
+        ]);
+
+    } else {
+
+        $stmt = $conn->query("
+            SELECT *
+            FROM product
+            ORDER BY id DESC
+        ");
+
+    }
 
 }
+
 
 $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 ?>
+
 
 <!DOCTYPE html>
 
@@ -63,19 +133,13 @@ $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
           href="style/bootstrap.min.css">
 
 
-    <!-- Vazirmatn -->
-
     <link rel="stylesheet"
           href="style/stiles/Vazirmatn-font-face.css">
 
 
-    <!-- Shop CSS -->
-
     <link rel="stylesheet"
           href="style/shop.css">
 
-
-    <!-- Bootstrap Icons -->
 
     <link rel="stylesheet"
           href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
@@ -113,7 +177,6 @@ $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 </span>
 
             </a>
-
 
 
             <!-- MENU -->
@@ -162,75 +225,80 @@ $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
             </div>
 
 
-
             <!-- NAVBAR ACTIONS -->
 
-         <!-- NAVBAR ACTIONS -->
-
-<div class="shop-navbar-actions">
-
-<!-- SEARCH -->
-
-<div class="shop-search">
-
-    <button
-        type="button"
-        class="shop-nav-icon"
-        id="searchButton"
-        title="جستجو">
-
-        <i class="bi bi-search"></i>
-
-    </button>
-
-    <form
-        action="shop.php"
-        method="GET"
-        class="shop-search-form"
-        id="searchForm">
-
-        <input
-            type="text"
-            name="search"
-            placeholder="جستجوی محصول..."
-            value="<?= htmlspecialchars($search) ?>"
-            autocomplete="off">
-
-        <button type="submit">
-            <i class="bi bi-search"></i>
-        </button>
-
-    </form>
-
-</div>
+            <div class="shop-navbar-actions">
 
 
-<!-- CART -->
+                <!-- SEARCH -->
 
-<a href="cart.php"
-   class="shop-nav-icon cart-nav"
-   title="سبد خرید">
+                <div class="shop-search">
 
-    <i class="bi bi-cart3"></i>
+                    <button
+                        type="button"
+                        class="shop-nav-icon"
+                        id="searchButton"
+                        title="جستجو">
 
-    <span class="cart-badge">
-        0
-    </span>
+                        <i class="bi bi-search"></i>
 
-</a>
+                    </button>
 
 
-<!-- THEME -->
+                    <form
+                        action="shop.php"
+                        method="GET"
+                        class="shop-search-form"
+                        id="searchForm">
 
-<button
-     type="button"
-     id="themeButton"
-     class="shop-theme-button"
-     title="تغییر حالت نمایش">
+                        <input
+                            type="text"
+                            name="search"
+                            placeholder="جستجوی محصول..."
+                            value="<?= htmlspecialchars($search) ?>"
+                            autocomplete="off">
 
-     <i class="bi bi-moon-stars-fill"></i>
+                        <button type="submit">
 
-</button>
+                            <i class="bi bi-search"></i>
+
+                        </button>
+
+                    </form>
+
+                </div>
+
+
+                <!-- CART -->
+
+                <a href="cart.php"
+                   class="shop-nav-icon cart-nav"
+                   title="سبد خرید">
+
+                    <i class="bi bi-cart3"></i>
+
+                    <span class="cart-badge">
+
+                        <?= isset($_SESSION['cart'])
+                            ? count($_SESSION['cart'])
+                            : 0 ?>
+
+                    </span>
+
+                </a>
+
+
+                <!-- THEME -->
+
+                <button
+                    type="button"
+                    id="themeButton"
+                    class="shop-theme-button"
+                    title="تغییر حالت نمایش">
+
+                    <i class="bi bi-moon-stars-fill"></i>
+
+                </button>
 
 
                 <!-- USER -->
@@ -243,6 +311,7 @@ $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
                         class="shop-user-button"
                         data-bs-toggle="dropdown"
                         aria-expanded="false">
+
 
                         <span class="user-avatar">
 
@@ -260,8 +329,8 @@ $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
                         <i class="bi bi-chevron-down"></i>
 
-                    </button>
 
+                    </button>
 
 
                     <!-- DROPDOWN -->
@@ -288,6 +357,7 @@ $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
                                     </strong>
 
+
                                     <small>
                                         کاربر فروشگاه
                                     </small>
@@ -300,47 +370,60 @@ $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 
                         <li>
+
                             <hr class="dropdown-divider">
+
                         </li>
 
 
                         <!-- ADMIN PANEL -->
 
-                        <li>
-
-                            <a
-                                class="dropdown-item"
-                                href="dashboard.php">
-
-                                <i class="bi bi-speedometer2"></i>
-
-                                پنل مدیریت
-
-                            </a>
-
-                        </li>
+                        <?php if (
+                            isset($_SESSION["role"]) &&
+                            $_SESSION["role"] === "admin"
+                        ): ?>
 
 
-                        <!-- PRODUCTS MANAGEMENT -->
+                            <li>
 
-                        <li>
+                                <a
+                                    class="dropdown-item"
+                                    href="dashboard.php">
 
-                            <a
-                                class="dropdown-item"
-                                href="products.php">
+                                    <i class="bi bi-speedometer2"></i>
 
-                                <i class="bi bi-box-seam"></i>
+                                    پنل مدیریت
 
-                                مدیریت محصولات
+                                </a>
 
-                            </a>
-
-                        </li>
+                            </li>
 
 
-                        <li>
-                            <hr class="dropdown-divider">
-                        </li>
+                            <!-- PRODUCTS MANAGEMENT -->
+
+                            <li>
+
+                                <a
+                                    class="dropdown-item"
+                                    href="products.php">
+
+                                    <i class="bi bi-box-seam"></i>
+
+                                    مدیریت محصولات
+
+                                </a>
+
+                            </li>
+
+
+                            <li>
+
+                                <hr class="dropdown-divider">
+
+                            </li>
+
+
+                        <?php endif; ?>
 
 
                         <!-- LOGOUT -->
@@ -375,6 +458,12 @@ $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 </nav>
 
+
+
+<!-- =====================================================
+     HERO
+===================================================== -->
+
 <section class="shop-hero">
 
     <div class="container">
@@ -397,6 +486,7 @@ $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 <h1>
 
                     خریدی ساده،
+
                     <span>
                         سریع و مطمئن
                     </span>
@@ -412,8 +502,9 @@ $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 </p>
 
 
-                <a href="#products"
-                   class="shop-hero-button">
+                <a
+                    href="#products"
+                    class="shop-hero-button">
 
                     مشاهده محصولات
 
@@ -423,7 +514,6 @@ $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 
             </div>
-
 
 
             <div class="shop-hero-visual">
@@ -439,8 +529,15 @@ $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 </section>
 
-<section class="shop-categories"
-         id="categories">
+
+
+<!-- =====================================================
+     CATEGORIES
+===================================================== -->
+
+<section
+    class="shop-categories"
+    id="categories">
 
     <div class="container">
 
@@ -458,12 +555,14 @@ $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
         </div>
 
 
-
         <div class="category-list">
 
 
-            <a href="#products"
-               class="category-item">
+            <!-- همه محصولات -->
+
+            <a
+                href="shop.php#products"
+                class="category-item">
 
                 <span>
 
@@ -478,8 +577,11 @@ $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
             </a>
 
 
-            <a href="#products"
-               class="category-item">
+            <!-- موبایل -->
+
+            <a
+                href="shop.php?category=1#products"
+                class="category-item">
 
                 <span>
 
@@ -488,52 +590,130 @@ $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 </span>
 
                 <strong>
-                    دیجیتال
+                    موبایل
                 </strong>
 
             </a>
 
 
-            <a href="#products"
-               class="category-item">
+            <!-- لپ تاپ -->
+
+            <a
+                href="shop.php?category=2#products"
+                class="category-item">
 
                 <span>
 
-                    <i class="bi bi-bag"></i>
+                    <i class="bi bi-laptop"></i>
 
                 </span>
 
                 <strong>
-                    پوشاک
+                    لپ‌تاپ
                 </strong>
 
             </a>
 
 
-            <a href="#products"
-               class="category-item">
+            <!-- کالای دیجیتال -->
+
+            <div class="category-digital">
+
+
+                <a
+                    href="javascript:void(0)"
+                    class="category-item"
+                    onclick="toggleDigital()">
+
+
+                    <span>
+
+                        <i class="bi bi-cpu"></i>
+
+                    </span>
+
+
+                    <strong>
+                        کالای دیجیتال
+                    </strong>
+
+
+                    <i class="bi bi-chevron-down category-arrow"></i>
+
+
+                </a>
+
+
+                <!-- SUB CATEGORIES -->
+
+                <div
+                    class="digital-subcategories"
+                    id="digitalSubcategories">
+
+
+                    <!-- ساعت هوشمند -->
+
+                    <a
+                        href="shop.php?category=7#products"
+                        class="subcategory-item">
+
+                        <i class="bi bi-smartwatch"></i>
+
+                        <strong>
+                            ساعت هوشمند
+                        </strong>
+
+                    </a>
+
+
+                    <!-- هدست -->
+
+                    <a
+                        href="shop.php?category=8#products"
+                        class="subcategory-item">
+
+                        <i class="bi bi-headset"></i>
+
+                        <strong>
+                            هدست
+                        </strong>
+
+                    </a>
+
+
+                    <!-- کنسول بازی -->
+
+                    <a
+                        href="shop.php?category=9#products"
+                        class="subcategory-item">
+
+                        <i class="bi bi-controller"></i>
+
+                        <strong>
+                            کنسول بازی
+                        </strong>
+
+                    </a>
+
+
+                </div>
+
+
+            </div>
+
+
+            <!-- سایر محصولات -->
+
+            <a
+                href="shop.php?category=10#products"
+                class="category-item">
 
                 <span>
 
-                    <i class="bi bi-house"></i>
+                    <i class="bi bi-box-seam"></i>
 
                 </span>
 
-                <strong>
-                    خانه
-                </strong>
-
-            </a>
-
-
-            <a href="#products"
-               class="category-item">
-
-                <span>
-
-                    <i class="bi bi-gift"></i>
-
-                </span>
 
                 <strong>
                     سایر محصولات
@@ -550,48 +730,58 @@ $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 
 
+<!-- =====================================================
+     PRODUCTS
+===================================================== -->
 
-
-<section class="shop-products"
-         id="products">
+<section
+    class="shop-products"
+    id="products">
 
     <div class="container">
 
 
-    <div class="shop-section-header">
+        <div class="shop-section-header">
 
-<div>
 
-    <span>
-        فروشگاه
-    </span>
+            <div>
 
-    <h2>
+                <span>
+                    فروشگاه
+                </span>
 
-        <?php if ($search !== ''): ?>
 
-            نتایج جستجو برای:
-            «<?= htmlspecialchars($search) ?>»
+                <h2>
 
-        <?php else: ?>
 
-            جدیدترین محصولات
+                    <?php if ($search !== ''): ?>
 
-        <?php endif; ?>
+                        نتایج جستجو برای:
 
-    </h2>
+                        «<?= htmlspecialchars($search) ?>»
 
-</div>
 
-<span class="product-count">
+                    <?php else: ?>
 
-    <?= count($products) ?>
+                        جدیدترین محصولات
 
-    محصول
 
-</span>
+                    <?php endif; ?>
 
-</div>
+
+                </h2>
+
+            </div>
+
+
+            <span class="product-count">
+
+                <?= count($products) ?>
+
+                محصول
+
+            </span>
+
 
         </div>
 
@@ -599,55 +789,72 @@ $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
         <?php if (empty($products)): ?>
 
-<div class="shop-empty">
 
-    <div class="shop-empty-icon">
+            <div class="shop-empty">
 
-        <i class="bi bi-search"></i>
 
-    </div>
+                <div class="shop-empty-icon">
 
-    <?php if ($search !== ''): ?>
+                    <i class="bi bi-search"></i>
 
-        <h3>
-            محصولی پیدا نشد
-        </h3>
+                </div>
 
-        <p>
-            برای «<?= htmlspecialchars($search) ?>»
-            محصولی در فروشگاه پیدا نکردیم.
-        </p>
 
-        <a
-            href="shop.php"
-            class="shop-hero-button">
+                <?php if ($search !== ''): ?>
 
-            مشاهده همه محصولات
 
-        </a>
+                    <h3>
+                        محصولی پیدا نشد
+                    </h3>
 
-    <?php else: ?>
 
-        <h3>
-            هنوز محصولی ثبت نشده است
-        </h3>
+                    <p>
 
-        <p>
-            محصولات ثبت شده در پنل مدیریت
-            اینجا نمایش داده می‌شوند.
-        </p>
+                        برای «<?= htmlspecialchars($search) ?>»
 
-        <a
-            href="dashboard.php"
-            class="shop-hero-button">
+                        محصولی در فروشگاه پیدا نکردیم.
 
-            ورود به پنل مدیریت
+                    </p>
 
-        </a>
 
-    <?php endif; ?>
+                    <a
+                        href="shop.php"
+                        class="shop-hero-button">
 
-</div>
+                        مشاهده همه محصولات
+
+                    </a>
+
+
+                <?php else: ?>
+
+
+                    <h3>
+                        هنوز محصولی ثبت نشده است
+                    </h3>
+
+
+                    <p>
+
+                        محصولات ثبت شده در پنل مدیریت
+                        اینجا نمایش داده می‌شوند.
+
+                    </p>
+
+
+                    <a
+                        href="dashboard.php"
+                        class="shop-hero-button">
+
+                        ورود به پنل مدیریت
+
+                    </a>
+
+
+                <?php endif; ?>
+
+
+            </div>
 
 
         <?php else: ?>
@@ -659,17 +866,19 @@ $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 <?php foreach ($products as $product): ?>
 
 
-                    <div class="col-xl-3
-                                col-lg-4
-                                col-md-6">
+                    <div
+                        class="col-xl-3
+                               col-lg-4
+                               col-md-6">
 
 
                         <div class="shop-product-card">
 
 
-                            <!-- PRODUCT IMAGE PLACEHOLDER -->
+                            <!-- PRODUCT IMAGE -->
 
                             <div class="shop-product-image">
+
 
                                 <span class="product-new">
 
@@ -679,6 +888,7 @@ $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 
                                 <i class="bi bi-box-seam"></i>
+
 
                             </div>
 
@@ -714,9 +924,35 @@ $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
                                 </p>
 
 
+                                <!-- STOCK -->
+
+                                <?php if ($product['stock'] > 0): ?>
+
+                                    <small class="text-success">
+
+                                        موجودی:
+
+                                        <?= $product['stock'] ?>
+
+                                        عدد
+
+                                    </small>
+
+                                <?php else: ?>
+
+                                    <small class="text-danger">
+
+                                        ناموجود
+
+                                    </small>
+
+                                <?php endif; ?>
+
 
                                 <div class="shop-product-bottom">
 
+
+                                    <!-- PRICE -->
 
                                     <div class="shop-price">
 
@@ -728,6 +964,7 @@ $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
                                         </strong>
 
+
                                         <span>
                                             تومان
                                         </span>
@@ -736,8 +973,13 @@ $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 
 
-                                    <div class="shop-product-actions">
+                                    <!-- ACTIONS -->
 
+                                    <div
+                                        class="shop-product-actions">
+
+
+                                        <!-- DETAILS -->
 
                                         <a
                                             href="product-detail.php?id=<?= $product['id'] ?>"
@@ -748,29 +990,78 @@ $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
                                         </a>
 
 
-                                        <form
-                                            action="cart.php"
-                                            method="POST">
 
-                                            <input
-                                                type="hidden"
-                                                name="product_id"
-                                                value="<?= $product['id'] ?>"
-                                            >
+                                        <!-- ADD TO CART -->
+
+                                        <?php if ($product['stock'] > 0): ?>
+
+
+                                            <form
+                                                action="cart.php"
+                                                method="POST">
+
+
+                                                <!-- PRODUCT ID -->
+
+                                                <input
+                                                    type="hidden"
+                                                    name="product_id"
+                                                    value="<?= $product['id'] ?>"
+                                                >
+
+
+                                                <!-- CSRF TOKEN -->
+
+                                                <input
+                                                    type="hidden"
+                                                    name="csrf_token"
+                                                    value="<?= htmlspecialchars(
+                                                        $_SESSION['csrf_token']
+                                                    ) ?>"
+                                                >
+
+
+                                                <button
+                                                    type="submit"
+                                                    name="add_to_cart"
+                                                    class="shop-cart-button">
+
+
+                                                    <i
+                                                        class="bi bi-cart-plus">
+                                                    </i>
+
+
+                                                    افزودن به سبد
+
+
+                                                </button>
+
+
+                                            </form>
+
+
+                                        <?php else: ?>
 
 
                                             <button
-                                                type="submit"
-                                                name="add_to_cart"
-                                                class="shop-cart-button">
+                                                type="button"
+                                                class="shop-cart-button"
+                                                disabled>
 
-                                                <i class="bi bi-cart-plus"></i>
 
-                                                افزودن به سبد
+                                                <i
+                                                    class="bi bi-x-circle">
+                                                </i>
+
+
+                                                ناموجود
+
 
                                             </button>
 
-                                        </form>
+
+                                        <?php endif; ?>
 
 
                                     </div>
@@ -818,6 +1109,7 @@ $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
                 <div class="shop-feature">
 
+
                     <div class="shop-feature-icon">
 
                         <i class="bi bi-truck"></i>
@@ -831,11 +1123,13 @@ $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
                             ارسال سریع
                         </h4>
 
+
                         <p>
                             سفارش خود را سریع دریافت کنید.
                         </p>
 
                     </div>
+
 
                 </div>
 
@@ -846,6 +1140,7 @@ $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
             <div class="col-lg-4">
 
                 <div class="shop-feature">
+
 
                     <div class="shop-feature-icon">
 
@@ -860,11 +1155,13 @@ $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
                             خرید امن
                         </h4>
 
+
                         <p>
                             اطلاعات شما نزد ما محفوظ است.
                         </p>
 
                     </div>
+
 
                 </div>
 
@@ -875,6 +1172,7 @@ $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
             <div class="col-lg-4">
 
                 <div class="shop-feature">
+
 
                     <div class="shop-feature-icon">
 
@@ -889,11 +1187,13 @@ $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
                             پشتیبانی
                         </h4>
 
+
                         <p>
                             در تمام مراحل خرید همراه شما هستیم.
                         </p>
 
                     </div>
+
 
                 </div>
 
@@ -908,94 +1208,140 @@ $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 
 
+<!-- =====================================================
+     FOOTER
+===================================================== -->
 
+<footer
+    class="shop-footer"
+    id="about">
 
-<footer class="shop-footer" id="about">
 
     <div class="container">
 
+
         <div class="row g-5">
 
-            <!-- فروشگاه -->
+
+            <!-- STORE -->
 
             <div class="col-lg-5 col-md-6">
 
+
                 <h3>
+
                     <i class="bi bi-bag-heart-fill"></i>
+
                     فروشگاه من
+
                 </h3>
 
+
                 <p>
+
                     یک تجربه ساده، سریع و مطمئن
                     برای خرید آنلاین.
+
                 </p>
+
 
             </div>
 
 
-            <!-- دسترسی سریع -->
+
+            <!-- QUICK ACCESS -->
 
             <div class="col-lg-3 col-md-6">
+
 
                 <h5>
                     دسترسی سریع
                 </h5>
 
+
                 <a href="shop.php">
                     خانه
                 </a>
+
 
                 <a href="#products">
                     محصولات
                 </a>
 
+
                 <a href="cart.php">
                     سبد خرید
                 </a>
 
-                <a href="dashboard.php">
-                    پنل مدیریت
-                </a>
+
+                <?php if (
+                    isset($_SESSION["role"]) &&
+                    $_SESSION["role"] === "admin"
+                ): ?>
+
+                    <a href="dashboard.php">
+                        پنل مدیریت
+                    </a>
+
+                <?php endif; ?>
+
 
             </div>
 
 
-            <!-- ارتباط با ما -->
+
+            <!-- CONTACT -->
 
             <div class="col-lg-4 col-md-12">
+
 
                 <h5>
                     ارتباط با ما
                 </h5>
 
-                <p>
-                    <i class="bi bi-telephone"></i>
-                    09120000000
-                </p>
 
                 <p>
-                    <i class="bi bi-envelope"></i>
-                    info@example.com
+
+                    <i class="bi bi-telephone"></i>
+
+                    09120000000
+
                 </p>
+
+
+                <p>
+
+                    <i class="bi bi-envelope"></i>
+
+                    info@example.com
+
+                </p>
+
 
             </div>
+
 
         </div>
 
 
         <div class="shop-footer-bottom">
 
-            © تمامی حقوق برای فروشگاه من محفوظ است.
+            © تمامی حقوق محفوظ است.
 
         </div>
+
 
     </div>
 
 </footer>
 
 
+
 <script src="js/bootstrap.bundle.min.js"></script>
+
 <script src="js/theme.js"></script>
+
+
 </body>
 
 </html>
